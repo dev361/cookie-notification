@@ -437,7 +437,7 @@ function cookie_inline_scripts() {
     // Check whether jquery has been loaded (even if we do not have a jquery dependency).
     if( wp_script_is( 'jquery', 'done' ) ) { ?>
         <!--START cookie_inline_scripts-->
-        <script type="text/javascript" >
+        <script id="cookie_inline_scripts" type="text/javascript" >
 
             /**************************************************
              * Start - Cookie Message
