@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Groupe 361 Cookie message settings
  * Plugin URI:        www.groupe361.com
- * Description:       Customize cookie notification message and styles
+ * Description:       Simple and customizable cookie notification message
  * Version:           1.0.0
  * Author:            German Pichardo
  * Author URI:        www.german-pichardo.com
@@ -385,32 +385,30 @@ function cookie_inline_css () {
               min-height:36px; 
               font-family:Arial,Helvetica,sans serif;
               text-align: center;
-              padding: 5px;z-index: 100000;
+              padding: 5px;
+              z-index: 100000;
               position:fixed;  
               left: 0;
               '.$bannerPositionStyle.'
               
           }
-          #cookieBannerContainer .cookie-content {
+          #cookieBannerContainer .cookie-inner {
             display:inline-block;
           }
-          #cookieBannerContainer .cookie-text {
-            padding: 5px 0;
-            text-align: center;
-            display: inline-block;
-            margin:0;
-          }
-          #cookieBannerContainer button {
+          #cookieBannerContainer button[type="button"] {
               background:none; 
               height: 26px;
               line-height:25px; 
               outline: 0; 
               font-size:10px; 
+              -webkit-border-radius: 8px;
+              -moz-border-radius: 8px;
               border-radius: 8px;
-              padding: 0 6px;
+              padding: 0 8px;
               cursor: pointer;
               position: relative;
               vertical-align: middle;
+              display: inline-block;
           }
       </style>
     ';
@@ -527,7 +525,7 @@ function cookie_inline_scripts() {
                         link_button = "";
                     }
 
-                    var bannerWrapper = createDom("<div id='cookieBannerContainer' style='background: "+option.background+"; background-color: "+convertHex(option.background,option.opacity)+"; color: "+option.text_color+"; font-size: "+option.font_size+"px;'><span class='cookie-content'><span class='cookie-text'>"+option.message+" "+link_button+"</span> <button type='button' style='color:"+option.text_color+";border:1px solid "+option.text_color+";font-size: "+option.font_size+"px;' id='cookieBannerButton' title='Fermer'>"+option.button_text+"</button></span></div>");
+                    var bannerWrapper = createDom("<div id='cookieBannerContainer' style='background: "+option.background+"; background-color: "+convertHex(option.background,option.opacity)+"; color: "+option.text_color+"; font-size: "+option.font_size+"px;'><div class='cookie-inner container'>"+option.message+" "+link_button+"  <button type='button' style='color:"+option.text_color+";border:1px solid "+option.text_color+";font-size: "+option.font_size+"px;' id='cookieBannerButton' title='Fermer'>"+option.button_text+"</button></div></div>");
 
                     body=document.body;
                     body.insertBefore(bannerWrapper,body.childNodes[0]);
