@@ -423,7 +423,7 @@ function cookie_inline_scripts() {
     // Variables with PHP fallback
     $cookie_settings_options = get_option( 'cookie_settings_option_name' ); // Array of All Options
     // Output array
-    $banner = array (
+    $banner_options = array (
         'background'    =>	$cookie_settings_options['background_color_1'] ? $cookie_settings_options['background_color_1'] : '#808080',
         'text_color'    =>	$cookie_settings_options['text_color_2'] ? $cookie_settings_options['text_color_2'] : '#ffffff',
         'button_text'   =>	$cookie_settings_options['button_text_3'] ? $cookie_settings_options['button_text_3'] : '' .__( 'ok', 'cookie-textdomain' ) . '',
@@ -433,8 +433,7 @@ function cookie_inline_scripts() {
         'link_text'     =>	$cookie_settings_options['banner_link_text_8'] ? $cookie_settings_options['banner_link_text_8'] : ''.__( 'en savoir plus', 'cookie-textdomain' ).'',
         'link_url'      =>	$cookie_settings_options['banner_link_url_9'] ? esc_url_raw($cookie_settings_options['banner_link_url_9']) : '',
     );
-    // Convert to Json string
-    $banner_json = json_encode($banner);
+
     // Check whether jquery has been loaded (even if we do not have a jquery dependency).
     if( wp_script_is( 'jquery', 'done' ) ) { ?>
         <!--START cookie_inline_scripts-->
@@ -443,13 +442,15 @@ function cookie_inline_scripts() {
             /**************************************************
              * Start - Cookie Message
              ***************************************************/
+                // Notification options
+            var options = <?php print json_encode($banner_options, 128); // 128 to convert to a pretty Json string ?>;
 
-            // We execute and pass the banner settings : backgroundColor,textColor,bannerMessage,buttonText,fontSize,bannerOpacity,linkText,LinkUrl
+            // We execute and pass the banner options string
             if (window.attachEvent)
-                window.attachEvent('onload', createCookieBanner( <?php print $banner_json;?>));
+                window.attachEvent('onload', createCookieBanner( options));
             else
             if (window.addEventListener)
-                window.addEventListener('load', createCookieBanner( <?php print $banner_json;?>),false);
+                window.addEventListener('load', createCookieBanner( options),false);
 
             function isIPaddress(ip){
                 if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ip)) return true;
@@ -512,30 +513,21 @@ function cookie_inline_scripts() {
                 return resultRgba;
             }
 
-            function createCookieBanner(banner_json) {
+            function createCookieBanner(option) {
                 if(!readCookie('cookie-enabled')){
-                    var banner_options = banner_json;
-                    // Banner settings : background, text_color, button_text, message, font_size, opacity
-                    var banner = {
-                        "background": banner_options.background || "#808080",
-                        "text_color": banner_options.text_color || "#ffffff",
-                        "button_text": banner_options.button_text || "ok",
-                        "message": banner_options.message || "<?php _e( 'Lorem ipsum', 'cookie-textdomain' ); ?>",
-                        "font_size": banner_options.font_size || "11",
-                        "opacity": banner_options.opacity || "80",
-                        "link_text": banner_options.link_text || "",
-                        "link_url": banner_options.link_url || ""
-                    };
+                    // Banner string options : background, text_color, button_text, message, font_size, opacity
+                    console.log(JSON.stringify(option));
 
                     // If link_url exists we build the button
                     var link_button;
-                    if(banner_options.link_url) {
-                        link_button = "<a href='" + banner.link_url + "' style='text-decoration: underline;' title='" + banner.link_text + "' target='_blank'>" + banner.link_text + "</a> ";
+                    if(option.link_url) {
+                        link_button = "<a href='" + option.link_url + "' style='text-decoration: underline;' title='" + option.link_text + "' target='_blank'>" + option.link_text + "</a> ";
                     } else {
                         // Return empty
                         link_button = "";
                     }
-                    var bannerWrapper = createDom("<div id='cookieBannerContainer' style='background: "+banner.background+"; background-color: "+convertHex(banner.background,banner.opacity)+"; color: "+banner.text_color+"; font-size: "+banner.font_size+"px;'><span class='cookie-content'><span class='cookie-text'>"+banner.message+" "+link_button+"</span> <button type='button' style='color:"+banner.text_color+";border:1px solid "+banner.text_color+";font-size: "+banner.font_size+"px;' id='cookieBannerButton' title='Fermer'>"+banner.button_text+"</button></span></div>");
+
+                    var bannerWrapper = createDom("<div id='cookieBannerContainer' style='background: "+option.background+"; background-color: "+convertHex(option.background,option.opacity)+"; color: "+option.text_color+"; font-size: "+option.font_size+"px;'><span class='cookie-content'><span class='cookie-text'>"+option.message+" "+link_button+"</span> <button type='button' style='color:"+option.text_color+";border:1px solid "+option.text_color+";font-size: "+option.font_size+"px;' id='cookieBannerButton' title='Fermer'>"+option.button_text+"</button></span></div>");
 
                     body=document.body;
                     body.insertBefore(bannerWrapper,body.childNodes[0]);
