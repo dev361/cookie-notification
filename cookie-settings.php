@@ -317,7 +317,7 @@ if( !class_exists( 'CookieSettings' )){
 
         public function banner_opacity_7_callback() {
             printf(
-                '<input class="small-text" type="text" name="cookie_settings_option_name[banner_opacity_7]" id="banner_opacity_7" value="%s" placeholder="80">  <p class="description"><small>1-100</small></p>',
+                '<input class="small-text" type="text" name="cookie_settings_option_name[banner_opacity_7]" id="banner_opacity_7" value="%s" placeholder="80"> %% <p class="description"><small>1-100</small></p>',
                 isset( $this->cookie_settings_options['banner_opacity_7'] ) ? esc_attr( $this->cookie_settings_options['banner_opacity_7']) : ''
             );
         }
