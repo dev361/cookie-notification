@@ -312,7 +312,7 @@ if ( is_admin() )
 if ( !get_option( 'cookie_settings_option_name' )['activate_cookie_message_0'] && !isset( $_COOKIE[ 'cookie-enabled']) && !is_admin() ) {
     // Inline CSS in head
     add_action( 'wp_print_styles', 'cookie_inline_css' );
-    // Inline JS in footer with
+    // Inline JS in footer with priority
     add_action( 'wp_footer', 'cookie_inline_scripts',999 ); // 999 is our priority
 }
 
