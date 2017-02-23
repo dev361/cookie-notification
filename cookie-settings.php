@@ -14,7 +14,7 @@
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
-	die;
+    die;
 }
 
 if( !class_exists( 'CookieSettings' )){
@@ -26,32 +26,23 @@ if( !class_exists( 'CookieSettings' )){
             add_action( 'admin_menu', array( $this, 'cookie_settings_add_plugin_page' ) );
             // Register page options
             add_action( 'admin_init', array( $this, 'cookie_settings_page_init' ) );
-
-            // Css rules for Color Picker
-            add_action('admin_enqueue_scripts', array( $this, 'enqueue_style_color_picker' ) );
-
-            // Register javascript scripts
-            add_action ( 'admin_footer', array ( $this, 'enqueue_script_color_picker' ) );
+            // Enqueue the needed Javascript and CSS in admin panel (Color picker)
+            add_action('admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
             // Add plugin settings link
             add_filter( 'plugin_action_links', array( $this, 'cookie_add_settings_link' ), 10, 2 );
         }
 
         /**
-         * Function that will add css file for Color Piker.
+         * Function that will enqueue the needed Javascript and CSS in admin panel
          */
-        public function enqueue_style_color_picker() {
-            wp_enqueue_style( 'wp-color-picker' );
-        }
-
-        /**
-         * Function that will add javascript file for Color Piker.
-         */
-        public function enqueue_script_color_picker() {
+        public function enqueue_admin_scripts() {
 
             $screen = get_current_screen();
 
             // We load the JS only in our settings page
             if ( $screen -> id == 'settings_page_cookie-settings' ) {
+                wp_enqueue_style( 'wp-color-picker' );
+
                 // Load external js file with color-picker dependency
                 wp_enqueue_script( 'color_picker_custom_js', plugins_url( 'js/color-picker-custom.js', __FILE__ ), array( 'jquery', 'wp-color-picker' ), '', true  );
             }
