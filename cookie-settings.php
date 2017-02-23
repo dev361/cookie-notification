@@ -102,6 +102,14 @@ if( !class_exists( 'CookieSettings' )){
                 'cookie-settings-admin' // page
             );
 
+            // Add Section for option fields - Link
+            add_settings_section(
+                'cookie_settings_setting_link', // id
+                '', // title
+                array( $this, 'cookie_settings_section_link_options' ), // callback
+                'cookie-settings-admin' // page
+            );
+
             // Add Message Field
             add_settings_field(
                 'activate_cookie_message_0', // id
@@ -172,6 +180,22 @@ if( !class_exists( 'CookieSettings' )){
                 'cookie-settings-admin', // page
                 'cookie_settings_setting_section' // section
             );
+            // Add banner link text
+            add_settings_field(
+                'banner_link_text_8', // id
+                __('Link text', 'cookie-textdomain'), // title
+                array( $this, 'banner_link_text_8_callback' ), // callback
+                'cookie-settings-admin', // page
+                'cookie_settings_setting_link' // section
+            );
+            // Add banner link url
+            add_settings_field(
+                'banner_link_url_9', // id
+                __('Link url', 'cookie-textdomain'), // title
+                array( $this, 'banner_link_url_9_callback' ), // callback
+                'cookie-settings-admin', // page
+                'cookie_settings_setting_link' // section
+            );
         }
         /**
          * Functions that registers settings link on plugin description.
@@ -223,11 +247,23 @@ if( !class_exists( 'CookieSettings' )){
                 $sanitary_values['banner_opacity_7'] = sanitize_text_field($input['banner_opacity_7']);
             }
 
+            if ( isset( $input['banner_link_text_8'] ) ) {
+                $sanitary_values['banner_link_text_8'] = sanitize_text_field($input['banner_link_text_8']);
+            }
+
+            if ( isset( $input['banner_link_url_9'] ) ) {
+                $sanitary_values['banner_link_url_9'] = sanitize_text_field($input['banner_link_url_9']);
+            }
+
             return $sanitary_values;
         }
 
         public function cookie_settings_section_info() {
 
+        }
+
+        public function cookie_settings_section_link_options() {
+            echo "<h2>".__(  'Link options', 'cookie-textdomain' )."</h2>";
         }
 
         public function activate_cookie_message_0_callback() {
@@ -286,6 +322,20 @@ if( !class_exists( 'CookieSettings' )){
             );
         }
 
+        public function banner_link_text_8_callback() {
+            printf(
+                '<input class="regular-text" type="text" name="cookie_settings_option_name[banner_link_text_8]" id="banner_link_text_8" value="%s" placeholder="'.__( 'en savoir plus', 'cookie-textdomain' ).'"> ',
+                isset( $this->cookie_settings_options['banner_link_text_8'] ) ? esc_attr( $this->cookie_settings_options['banner_link_text_8']) : ''
+            );
+        }
+
+        public function banner_link_url_9_callback() {
+            printf(
+                '<input class="regular-text" type="text" name="cookie_settings_option_name[banner_link_url_9]" id="banner_link_url_9" value="%s">  <p class="description"><small>'.__( 'If no url, the link will not be displayed', 'cookie-textdomain' ).'</small></p>',
+                isset( $this->cookie_settings_options['banner_link_url_9'] ) ? esc_url_raw( $this->cookie_settings_options['banner_link_url_9']) : ''
+            );
+        }
+
     }
 } // !class_exists
 
@@ -300,7 +350,9 @@ if ( is_admin() )
 //   $banner_position_4 = $cookie_settings_options['banner_position_4']; // Position
 //   $banner_message_5 = $cookie_settings_options['banner_message_5']; // Banner message
 //   $banner_font_size_6 = $cookie_settings_options['banner_font_size_6']; // Banner font size
-//   $banner_opacity_7 = $cookie_settings_options['banner_opacity_7']; // Banner font size
+//   $banner_opacity_7 = $cookie_settings_options['banner_opacity_7']; // Banner opacity
+//   $banner_link_text_8 = $cookie_settings_options['banner_link_text_8']; // Banner link text
+//   $banner_link_url_9 = $cookie_settings_options['banner_link_url_9']; // Banner link url
 
 /******************************************************************************
  * FRONT-END
@@ -378,6 +430,8 @@ function cookie_inline_scripts() {
         'message'       =>	$cookie_settings_options['banner_message_5'] ? $cookie_settings_options['banner_message_5'] : '' .__( 'Les cookies assurent le bon fonctionnement de nos services. En utilisant ces derniers, vous acceptez l&apos;utilisation des cookies.', 'cookie-textdomain' ) . '',
         'font_size'     =>	$cookie_settings_options['banner_font_size_6'] ? $cookie_settings_options['banner_font_size_6'] : '11',
         'opacity'       =>	$cookie_settings_options['banner_opacity_7'] ? $cookie_settings_options['banner_opacity_7'] : '80',
+        'link_text'     =>	$cookie_settings_options['banner_link_text_8'] ? $cookie_settings_options['banner_link_text_8'] : ''.__( 'en savoir plus', 'cookie-textdomain' ).'',
+        'link_url'      =>	$cookie_settings_options['banner_link_url_9'] ? esc_url_raw($cookie_settings_options['banner_link_url_9']) : '',
     );
     // Convert to Json string
     $banner_json = json_encode($banner);
@@ -390,7 +444,7 @@ function cookie_inline_scripts() {
              * Start - Cookie Message
              ***************************************************/
 
-            // We execute and pass the banner settings : backgroundColor,textColor,bannerMessage,buttonText,fontSize,bannerOpacity
+            // We execute and pass the banner settings : backgroundColor,textColor,bannerMessage,buttonText,fontSize,bannerOpacity,linkText,LinkUrl
             if (window.attachEvent)
                 window.attachEvent('onload', createCookieBanner( <?php print $banner_json;?>));
             else
@@ -468,10 +522,20 @@ function cookie_inline_scripts() {
                         "button_text": banner_options.button_text || "ok",
                         "message": banner_options.message || "<?php _e( 'Lorem ipsum', 'cookie-textdomain' ); ?>",
                         "font_size": banner_options.font_size || "11",
-                        "opacity": banner_options.opacity || "80"
+                        "opacity": banner_options.opacity || "80",
+                        "link_text": banner_options.link_text || "",
+                        "link_url": banner_options.link_url || ""
                     };
 
-                    var bannerWrapper = createDom("<div id='cookieBannerContainer' style='background: "+banner.background+"; background-color: "+convertHex(banner.background,banner.opacity)+"; color: "+banner.text_color+"; font-size: "+banner.font_size+"px;'><span class='cookie-content'><span class='cookie-text'>"+banner.message+"</span> <button type='button' style='color:"+banner.text_color+";border:1px solid "+banner.text_color+";font-size: "+banner.font_size+"px;' id='cookieBannerButton' title='Fermer'>"+banner.button_text+"</button></span></div>");
+                    // If link_url exists we build the button
+                    var link_button;
+                    if(banner_options.link_url) {
+                        link_button = "<a href='" + banner.link_url + "' style='text-decoration: underline;' title='" + banner.link_text + "' target='_blank'>" + banner.link_text + "</a> ";
+                    } else {
+                        // Return empty
+                        link_button = "";
+                    }
+                    var bannerWrapper = createDom("<div id='cookieBannerContainer' style='background: "+banner.background+"; background-color: "+convertHex(banner.background,banner.opacity)+"; color: "+banner.text_color+"; font-size: "+banner.font_size+"px;'><span class='cookie-content'><span class='cookie-text'>"+banner.message+" "+link_button+"</span> <button type='button' style='color:"+banner.text_color+";border:1px solid "+banner.text_color+";font-size: "+banner.font_size+"px;' id='cookieBannerButton' title='Fermer'>"+banner.button_text+"</button></span></div>");
 
                     body=document.body;
                     body.insertBefore(bannerWrapper,body.childNodes[0]);
