@@ -41,8 +41,8 @@ if( !class_exists( 'CookieSettings' )){
 
             // We load the JS only in our settings page
             if ( $screen -> id == 'settings_page_cookie-settings' ) {
+                // Css color-picker
                 wp_enqueue_style( 'wp-color-picker' );
-
                 // Load external js file with color-picker dependency
                 wp_enqueue_script( 'color_picker_custom_js', plugins_url( 'js/color-picker-custom.js', __FILE__ ), array( 'jquery', 'wp-color-picker' ), '', true  );
             }
@@ -230,7 +230,7 @@ if( !class_exists( 'CookieSettings' )){
 
         public function activate_cookie_message_0_callback() {
             printf(
-                '<input type="checkbox" name="cookie_settings_option_name[activate_cookie_message_0]" id="activate_cookie_message_0" value="activate_cookie_message_0" %s> <label for="activate_cookie_message_0">' .__( 'Activate cookie banner', 'cookie-textdomain' ) . '</label>',
+                '<input type="checkbox" name="cookie_settings_option_name[activate_cookie_message_0]" id="activate_cookie_message_0" value="activate_cookie_message_0" %s> <label for="activate_cookie_message_0">' .__( 'Unable the notification temporary', 'cookie-textdomain' ) . '</label>',
                 ( isset( $this->cookie_settings_options['activate_cookie_message_0'] ) && $this->cookie_settings_options['activate_cookie_message_0'] === 'activate_cookie_message_0' ) ? 'checked' : ''
             );
         }
@@ -302,10 +302,12 @@ if ( is_admin() )
 
 /******************************************************************************
  * FRONT-END
- * If cookies option is activated and cookies are already injected and we are in front-end
+ * If disable notification option is checked
+ * && "cookie-enabled" is already injected
+ * && we are not in admin area
  *************************************************************************/
 
-if ( get_option( 'cookie_settings_option_name' )['activate_cookie_message_0'] && !isset( $_COOKIE[ 'cookie-enabled']) && !is_admin() ) {
+if ( !get_option( 'cookie_settings_option_name' )['activate_cookie_message_0'] && !isset( $_COOKIE[ 'cookie-enabled']) && !is_admin() ) {
     // Inline CSS in head
     add_action( 'wp_print_styles', 'cookie_inline_css' );
     // Inline JS in footer
