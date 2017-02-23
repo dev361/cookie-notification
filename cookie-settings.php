@@ -312,8 +312,8 @@ if ( is_admin() )
 if ( !get_option( 'cookie_settings_option_name' )['activate_cookie_message_0'] && !isset( $_COOKIE[ 'cookie-enabled']) && !is_admin() ) {
     // Inline CSS in head
     add_action( 'wp_print_styles', 'cookie_inline_css' );
-    // Inline JS in footer
-    add_action( 'wp_footer', 'cookie_inline_scripts' );
+    // Inline JS in footer with
+    add_action( 'wp_footer', 'cookie_inline_scripts',999 ); // 999 is our priority
 }
 
 /**
@@ -370,7 +370,7 @@ function cookie_inline_css () {
 function cookie_inline_scripts() {
     // Variables with PHP fallback
     $cookie_settings_options = get_option( 'cookie_settings_option_name' ); // Array of All Options
-
+    // Output array
     $banner = array (
         'background'    =>	$cookie_settings_options['background_color_1'] ? $cookie_settings_options['background_color_1'] : '#808080',
         'text_color'    =>	$cookie_settings_options['text_color_2'] ? $cookie_settings_options['text_color_2'] : '#ffffff',
@@ -381,10 +381,10 @@ function cookie_inline_scripts() {
     );
     // Convert to Json string
     $banner_json = json_encode($banner);
-
+    // Check whether jquery has been loaded (even if we do not have a jquery dependency).
     if( wp_script_is( 'jquery', 'done' ) ) { ?>
         <!--START cookie_inline_scripts-->
-        <script type="text/javascript" defer >
+        <script type="text/javascript" >
 
             /**************************************************
              * Start - Cookie Message
@@ -493,4 +493,3 @@ function cookie_inline_scripts() {
     }
 
 }
-
