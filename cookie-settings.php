@@ -20,7 +20,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 if( !class_exists( 'CookieSettings' )){
     class CookieSettings {
         private $cookie_settings_options;
-
+        /**
+         * Plugin initialization
+         */
         public function __construct() {
             // Add the page to the admin menu
             add_action( 'admin_menu', array( $this, 'cookie_settings_add_plugin_page' ) );
@@ -230,7 +232,7 @@ if( !class_exists( 'CookieSettings' )){
 
         public function activate_cookie_message_0_callback() {
             printf(
-                '<input type="checkbox" name="cookie_settings_option_name[activate_cookie_message_0]" id="activate_cookie_message_0" value="activate_cookie_message_0" %s> <label for="activate_cookie_message_0">' .__( 'Unable the notification temporary', 'cookie-textdomain' ) . '</label>',
+                '<input type="checkbox" name="cookie_settings_option_name[activate_cookie_message_0]" id="activate_cookie_message_0" value="activate_cookie_message_0" %s> <label for="activate_cookie_message_0">' .__( 'Unable notification temporary', 'cookie-textdomain' ) . '</label>',
                 ( isset( $this->cookie_settings_options['activate_cookie_message_0'] ) && $this->cookie_settings_options['activate_cookie_message_0'] === 'activate_cookie_message_0' ) ? 'checked' : ''
             );
         }
