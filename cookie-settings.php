@@ -182,17 +182,17 @@ if( !class_exists( 'CookieSettings' )){
             );
             // Add banner link text
             add_settings_field(
-                'banner_link_text_8', // id
-                __('Link text', 'cookie-textdomain'), // title
-                array( $this, 'banner_link_text_8_callback' ), // callback
+                'banner_more_info_text_8', // id
+                __('More Info Text', 'cookie-textdomain'), // title
+                array( $this, 'banner_more_info_text_8_callback' ), // callback
                 'cookie-settings-admin', // page
                 'cookie_settings_setting_link' // section
             );
             // Add banner link url
             add_settings_field(
-                'banner_link_url_9', // id
-                __('Link url', 'cookie-textdomain'), // title
-                array( $this, 'banner_link_url_9_callback' ), // callback
+                'banner_more_info_url_9', // id
+                __('More Info url', 'cookie-textdomain'), // title
+                array( $this, 'banner_more_info_url_9_callback' ), // callback
                 'cookie-settings-admin', // page
                 'cookie_settings_setting_link' // section
             );
@@ -247,12 +247,12 @@ if( !class_exists( 'CookieSettings' )){
                 $sanitary_values['banner_opacity_7'] = sanitize_text_field($input['banner_opacity_7']);
             }
 
-            if ( isset( $input['banner_link_text_8'] ) ) {
-                $sanitary_values['banner_link_text_8'] = sanitize_text_field($input['banner_link_text_8']);
+            if ( isset( $input['banner_more_info_text_8'] ) ) {
+                $sanitary_values['banner_more_info_text_8'] = sanitize_text_field($input['banner_more_info_text_8']);
             }
 
-            if ( isset( $input['banner_link_url_9'] ) ) {
-                $sanitary_values['banner_link_url_9'] = sanitize_text_field($input['banner_link_url_9']);
+            if ( isset( $input['banner_more_info_url_9'] ) ) {
+                $sanitary_values['banner_more_info_url_9'] = sanitize_text_field($input['banner_more_info_url_9']);
             }
 
             return $sanitary_values;
@@ -263,7 +263,7 @@ if( !class_exists( 'CookieSettings' )){
         }
 
         public function cookie_settings_section_link_options() {
-            echo "<h2>".__(  'Link options', 'cookie-textdomain' )."</h2>";
+            echo "<h2>".__(  'More Info link options', 'cookie-textdomain' )."</h2>";
         }
 
         public function activate_cookie_message_0_callback() {
@@ -322,17 +322,17 @@ if( !class_exists( 'CookieSettings' )){
             );
         }
 
-        public function banner_link_text_8_callback() {
+        public function banner_more_info_text_8_callback() {
             printf(
-                '<input class="regular-text" type="text" name="cookie_settings_option_name[banner_link_text_8]" id="banner_link_text_8" value="%s" placeholder="'.__( 'en savoir plus', 'cookie-textdomain' ).'"> ',
-                isset( $this->cookie_settings_options['banner_link_text_8'] ) ? esc_attr( $this->cookie_settings_options['banner_link_text_8']) : ''
+                '<input class="regular-text" type="text" name="cookie_settings_option_name[banner_more_info_text_8]" id="banner_more_info_text_8" value="%s" placeholder="'.__( 'en savoir plus', 'cookie-textdomain' ).'"> ',
+                isset( $this->cookie_settings_options['banner_more_info_text_8'] ) ? esc_attr( $this->cookie_settings_options['banner_more_info_text_8']) : ''
             );
         }
 
-        public function banner_link_url_9_callback() {
+        public function banner_more_info_url_9_callback() {
             printf(
-                '<input class="regular-text" type="text" name="cookie_settings_option_name[banner_link_url_9]" id="banner_link_url_9" value="%s">  <p class="description"><small>'.__( 'If no url, the link will not be displayed', 'cookie-textdomain' ).'</small></p>',
-                isset( $this->cookie_settings_options['banner_link_url_9'] ) ? esc_url_raw( $this->cookie_settings_options['banner_link_url_9']) : ''
+                '<input class="regular-text" type="text" name="cookie_settings_option_name[banner_more_info_url_9]" id="banner_more_info_url_9" value="%s">  <p class="description"><small>'.__( 'If no url, the more info link will not be displayed', 'cookie-textdomain' ).'</small></p>',
+                isset( $this->cookie_settings_options['banner_more_info_url_9'] ) ? esc_url_raw( $this->cookie_settings_options['banner_more_info_url_9']) : ''
             );
         }
 
@@ -351,8 +351,8 @@ if ( is_admin() )
 //   $banner_message_5 = $cookie_settings_options['banner_message_5']; // Banner message
 //   $banner_font_size_6 = $cookie_settings_options['banner_font_size_6']; // Banner font size
 //   $banner_opacity_7 = $cookie_settings_options['banner_opacity_7']; // Banner opacity
-//   $banner_link_text_8 = $cookie_settings_options['banner_link_text_8']; // Banner link text
-//   $banner_link_url_9 = $cookie_settings_options['banner_link_url_9']; // Banner link url
+//   $banner_more_info_text_8 = $cookie_settings_options['banner_more_info_text_8']; // Banner link text
+//   $banner_more_info_url_9 = $cookie_settings_options['banner_more_info_url_9']; // Banner link url
 
 /******************************************************************************
  * FRONT-END
@@ -430,8 +430,8 @@ function cookie_inline_scripts() {
         'message'       =>	$cookie_settings_options['banner_message_5'] ? $cookie_settings_options['banner_message_5'] : '' .__( 'Les cookies assurent le bon fonctionnement de nos services. En utilisant ces derniers, vous acceptez l&apos;utilisation des cookies.', 'cookie-textdomain' ) . '',
         'font_size'     =>	$cookie_settings_options['banner_font_size_6'] ? $cookie_settings_options['banner_font_size_6'] : '11',
         'opacity'       =>	$cookie_settings_options['banner_opacity_7'] ? $cookie_settings_options['banner_opacity_7'] : '80',
-        'link_text'     =>	$cookie_settings_options['banner_link_text_8'] ? $cookie_settings_options['banner_link_text_8'] : ''.__( 'en savoir plus', 'cookie-textdomain' ).'',
-        'link_url'      =>	$cookie_settings_options['banner_link_url_9'] ? esc_url_raw($cookie_settings_options['banner_link_url_9']) : '',
+        'link_text'     =>	$cookie_settings_options['banner_more_info_text_8'] ? $cookie_settings_options['banner_more_info_text_8'] : ''.__( 'en savoir plus', 'cookie-textdomain' ).'',
+        'link_url'      =>	$cookie_settings_options['banner_more_info_url_9'] ? esc_url_raw($cookie_settings_options['banner_more_info_url_9']) : '',
     );
 
     // Check whether jquery has been loaded (even if we do not have a jquery dependency).
