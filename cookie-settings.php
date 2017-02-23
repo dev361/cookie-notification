@@ -379,7 +379,7 @@ function cookie_inline_scripts() {
         'font_size'     =>	$cookie_settings_options['banner_font_size_6'] ? $cookie_settings_options['banner_font_size_6'] : '11',
         'opacity'       =>	$cookie_settings_options['banner_opacity_7'] ? $cookie_settings_options['banner_opacity_7'] : '80',
     );
-    // Convert to Json array
+    // Convert to Json string
     $banner_json = json_encode($banner);
 
     if( wp_script_is( 'jquery', 'done' ) ) { ?>
