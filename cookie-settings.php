@@ -271,7 +271,7 @@ if( !class_exists( 'CookieSettings' )){
         }
 
         /**
-         * Fields callback
+         * Fields individual callbacks
          */
         public function activate_cookie_message_0_callback() {
             printf(
@@ -379,13 +379,6 @@ if ( !get_option( 'cookie_settings_option_name' )['activate_cookie_message_0'] &
  * Inline CSS to build banner general style
  */
 function cookie_inline_css () {
-    // Position conditional style
-    $bannerPositionStyle ='';
-    if (get_option( 'cookie_settings_option_name' )['banner_position_4'] == 'top'  ) {
-        $bannerPositionStyle .= 'bottom:auto !important ;top:0;';
-    } else { // Default position is bottom
-        $bannerPositionStyle .= 'bottom:0;top:auto;';
-    }
     echo '<style id="cookie_inline_css" type="text/css">
           #cookieBannerContainer {
               width:100%;
@@ -396,8 +389,6 @@ function cookie_inline_css () {
               z-index: 100000;
               position:fixed;  
               left: 0;
-              '.$bannerPositionStyle.'
-              
           }
           #cookieBannerContainer .cookie-inner {
             display:inline-block;
@@ -432,6 +423,7 @@ function cookie_inline_scripts() {
         'background'    =>	$cookie_settings_options['background_color_1'] ? $cookie_settings_options['background_color_1'] : '#808080',
         'text_color'    =>	$cookie_settings_options['text_color_2'] ? $cookie_settings_options['text_color_2'] : '#ffffff',
         'button_text'   =>	$cookie_settings_options['button_text_3'] ? $cookie_settings_options['button_text_3'] : '' .__( 'ok', 'cookie-textdomain' ) . '',
+        'position'       =>	$cookie_settings_options['banner_position_4'] ? $cookie_settings_options['banner_position_4'] : '',
         'message'       =>	$cookie_settings_options['banner_message_5'] ? $cookie_settings_options['banner_message_5'] : '' .__( 'Les cookies assurent le bon fonctionnement de nos services. En utilisant ces derniers, vous acceptez l&apos;utilisation des cookies.', 'cookie-textdomain' ) . '',
         'font_size'     =>	$cookie_settings_options['banner_font_size_6'] ? $cookie_settings_options['banner_font_size_6'] : '11',
         'opacity'       =>	$cookie_settings_options['banner_opacity_7'] ? $cookie_settings_options['banner_opacity_7'] : '80',
@@ -448,14 +440,14 @@ function cookie_inline_scripts() {
              * Start - Cookie Message
              ***************************************************/
                 // Notification options
-            var options = <?php print json_encode($banner_options, 128); // 128 to convert to a pretty Json string ?>;
+            var option = <?php print json_encode($banner_options, 128); // 128 to convert to a pretty Json string ?>;
 
             // We execute and pass the banner options string
             if (window.attachEvent)
-                window.attachEvent('onload', createCookieBanner( options));
+                window.attachEvent('onload', createCookieBanner( option));
             else
             if (window.addEventListener)
-                window.addEventListener('load', createCookieBanner( options),false);
+                window.addEventListener('load', createCookieBanner( option),false);
 
             function isIPaddress(ip){
                 if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ip)) return true;
@@ -532,7 +524,14 @@ function cookie_inline_scripts() {
                         link_button = "";
                     }
 
-                    var bannerWrapper = createDom("<div id='cookieBannerContainer' style='background: "+option.background+"; background-color: "+convertHex(option.background,option.opacity)+"; color: "+option.text_color+"; font-size: "+option.font_size+"px;'><div class='cookie-inner container'>"+option.message+" "+link_button+"  <button type='button' style='color:"+option.text_color+";border:1px solid "+option.text_color+";font-size: "+option.font_size+"px;' id='cookieBannerButton' title='Fermer'>"+option.button_text+"</button></div></div>");
+                    // Position conditional style
+                    var banner_position;
+                    if(option.position === 'top') {
+                        banner_position = "bottom:auto;top:0;";
+                    } else {
+                        banner_position = "top:auto;bottom:0;";
+                    }
+                    var bannerWrapper = createDom("<div id='cookieBannerContainer' style='background: "+option.background+"; background-color: "+convertHex(option.background,option.opacity)+"; color: "+option.text_color+"; font-size: "+option.font_size+"px;"+banner_position+"'><div class='cookie-inner container'>"+option.message+" "+link_button+"  <button type='button' style='color:"+option.text_color+";border:1px solid "+option.text_color+";font-size: "+option.font_size+"px;' id='cookieBannerButton' title='Fermer'>"+option.button_text+"</button></div></div>");
 
                     body=document.body;
                     body.insertBefore(bannerWrapper,body.childNodes[0]);
