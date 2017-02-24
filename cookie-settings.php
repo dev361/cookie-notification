@@ -196,6 +196,15 @@ if( !class_exists( 'CookieSettings' )){
                 'cookie-settings-admin', // page
                 'cookie_settings_setting_link' // section
             );
+            // Field to open url in new window
+            add_settings_field(
+                'banner_more_info_url_target_blank_10', // id
+                __('General activation', 'cookie-textdomain'), // title
+                array( $this, 'banner_more_info_url_target_blank_10_callback' ), // callback
+                'cookie-settings-admin', // page
+                'cookie_settings_setting_link' // section
+            );
+
         }
         /**
          * Functions that registers settings link on plugin description.
@@ -265,6 +274,10 @@ if( !class_exists( 'CookieSettings' )){
 
             if ( isset( $input['banner_more_info_url_9'] ) ) {
                 $sanitary_values['banner_more_info_url_9'] = sanitize_text_field($input['banner_more_info_url_9']);
+            }
+
+            if ( isset( $input['banner_more_info_url_target_blank_10'] ) ) {
+                $sanitary_values['banner_more_info_url_target_blank_10'] = $input['banner_more_info_url_target_blank_10'];
             }
 
             return $sanitary_values;
@@ -343,6 +356,13 @@ if( !class_exists( 'CookieSettings' )){
             );
         }
 
+        public function banner_more_info_url_target_blank_10_callback() {
+            printf(
+                '<input type="checkbox" name="cookie_settings_option_name[banner_more_info_url_target_blank_10]" id="banner_more_info_url_target_blank_10" value="banner_more_info_url_target_blank_10" %s> <label for="banner_more_info_url_target_blank_10">' .__( 'Open url in new window', 'cookie-textdomain' ) . '</label>',
+                ( isset( $this->cookie_settings_options['banner_more_info_url_target_blank_10'] ) && $this->cookie_settings_options['banner_more_info_url_target_blank_10'] === 'banner_more_info_url_target_blank_10' ) ? 'checked' : ''
+            );
+        }
+
     }
 } // !class_exists
 
@@ -360,6 +380,8 @@ if ( is_admin() )
 //   $banner_opacity_7 = $cookie_settings_options['banner_opacity_7']; // Banner opacity
 //   $banner_more_info_text_8 = $cookie_settings_options['banner_more_info_text_8']; // Banner link text
 //   $banner_more_info_url_9 = $cookie_settings_options['banner_more_info_url_9']; // Banner link url
+//   $banner_more_info_url_target_blank_10 = $cookie_settings_options['banner_more_info_url_target_blank_10']; // Activate cookie message
+
 
 /******************************************************************************
  * FRONT-END
@@ -429,6 +451,7 @@ function cookie_inline_scripts() {
         'opacity'       =>	$cookie_settings_options['banner_opacity_7'] ? $cookie_settings_options['banner_opacity_7'] : '80',
         'link_text'     =>	$cookie_settings_options['banner_more_info_text_8'] ? $cookie_settings_options['banner_more_info_text_8'] : ''.__( 'en savoir plus', 'cookie-textdomain' ).'',
         'link_url'      =>	$cookie_settings_options['banner_more_info_url_9'] ? esc_url_raw($cookie_settings_options['banner_more_info_url_9']) : '',
+        'link_target'   =>	$cookie_settings_options['banner_more_info_url_target_blank_10'] ? $cookie_settings_options['banner_more_info_url_target_blank_10'] : '',
     );
 
     // Check whether jquery has been loaded (even if we do not have a jquery dependency).
@@ -516,12 +539,16 @@ function cookie_inline_scripts() {
                     console.log(JSON.stringify(option));
 
                     // If link_url exists we build the button
-                    var link_button;
+                    var link_button = ""; // Link empty
+                    var link_target = ""; // Link target empty
+
                     if(option.link_url) {
-                        link_button = "<a href='" + option.link_url + "' style='text-decoration: underline;' title='" + option.link_text + "' target='_blank'>" + option.link_text + "</a> ";
-                    } else {
-                        // Return empty
-                        link_button = "";
+                        // Open in new window attribute
+                        if(option.link_target) {
+                            link_target = " target='_blank' ";
+                        }
+                        // Build the href
+                        link_button = "<a "+link_target+" href='" + option.link_url + "' style='text-decoration: underline;' title='" + option.link_text + "' >" + option.link_text + "</a> ";
                     }
 
                     // Position conditional style
