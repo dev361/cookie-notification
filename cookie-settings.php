@@ -451,7 +451,7 @@ function cookie_inline_scripts() {
         'opacity'       =>	$cookie_settings_options['banner_opacity_7'] ? $cookie_settings_options['banner_opacity_7'] : '80',
         'link_text'     =>	$cookie_settings_options['banner_more_info_text_8'] ? $cookie_settings_options['banner_more_info_text_8'] : ''.__( 'en savoir plus', 'cookie-textdomain' ).'',
         'link_url'      =>	$cookie_settings_options['banner_more_info_url_9'] ? esc_url_raw($cookie_settings_options['banner_more_info_url_9']) : '',
-        'link_target'   =>	$cookie_settings_options['banner_more_info_url_target_blank_10'] ? $cookie_settings_options['banner_more_info_url_target_blank_10'] : false,
+        'link_target_blank'   =>	$cookie_settings_options['banner_more_info_url_target_blank_10'] ? $cookie_settings_options['banner_more_info_url_target_blank_10'] : false,
     );
 
     // Check whether jquery has been loaded (even if we do not have a jquery dependency).
@@ -540,16 +540,16 @@ function cookie_inline_scripts() {
 
                     // If link_url exists we build the button
                     var link_button = ""; // Link empty
-                    var link_target = ""; // Link target empty
+                    var link_target_blank = ""; // Link target empty
 
                     if(option.link_url) {
                         // Open in new window attribute
-                        console.log(option.link_target);
-                        if(option.link_target !== false) {
-                            link_target = " target='_blank' ";
+                        console.log(option.link_target_blank);
+                        if(option.link_target_blank !== false) {
+                            link_target_blank = " target='_blank' ";
                         }
                         // Build the href
-                        link_button = "<a "+link_target+" href='" + option.link_url + "' style='text-decoration: underline;' title='" + option.link_text + "' >" + option.link_text + "</a> ";
+                        link_button = "<a "+link_target_blank+" href='" + option.link_url + "' style='text-decoration: underline;' title='" + option.link_text + "' >" + option.link_text + "</a> ";
                     }
 
                     // Position conditional style
