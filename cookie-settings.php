@@ -451,7 +451,7 @@ function cookie_inline_scripts() {
         'opacity'       =>	$cookie_settings_options['banner_opacity_7'] ? $cookie_settings_options['banner_opacity_7'] : '80',
         'link_text'     =>	$cookie_settings_options['banner_more_info_text_8'] ? $cookie_settings_options['banner_more_info_text_8'] : ''.__( 'en savoir plus', 'cookie-textdomain' ).'',
         'link_url'      =>	$cookie_settings_options['banner_more_info_url_9'] ? esc_url_raw($cookie_settings_options['banner_more_info_url_9']) : '',
-        'link_target'   =>	$cookie_settings_options['banner_more_info_url_target_blank_10'] ? $cookie_settings_options['banner_more_info_url_target_blank_10'] : '',
+        'link_target'   =>	$cookie_settings_options['banner_more_info_url_target_blank_10'] ? $cookie_settings_options['banner_more_info_url_target_blank_10'] : false,
     );
 
     // Check whether jquery has been loaded (even if we do not have a jquery dependency).
@@ -544,7 +544,8 @@ function cookie_inline_scripts() {
 
                     if(option.link_url) {
                         // Open in new window attribute
-                        if(option.link_target) {
+                        console.log(option.link_target);
+                        if(option.link_target !== false) {
                             link_target = " target='_blank' ";
                         }
                         // Build the href
