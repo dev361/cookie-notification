@@ -211,6 +211,18 @@ if( !class_exists( 'CookieSettings' )){
 
         } // end cookie_add_settings_link
         /**
+         * Section info callback
+         */
+        public function cookie_settings_section_info() {
+            echo '<hr>';
+        }
+        /**
+         * Section link callback
+         */
+        public function cookie_settings_section_link_options() {
+            echo "<hr><h2>".__(  'More Info link options', 'cookie-textdomain' )."</h2>";
+        }
+        /**
          * Functions that display the fields.
          */
         public function cookie_settings_sanitize($input) {
@@ -258,14 +270,9 @@ if( !class_exists( 'CookieSettings' )){
             return $sanitary_values;
         }
 
-        public function cookie_settings_section_info() {
-
-        }
-
-        public function cookie_settings_section_link_options() {
-            echo "<h2>".__(  'More Info link options', 'cookie-textdomain' )."</h2>";
-        }
-
+        /**
+         * Fields callback
+         */
         public function activate_cookie_message_0_callback() {
             printf(
                 '<input type="checkbox" name="cookie_settings_option_name[activate_cookie_message_0]" id="activate_cookie_message_0" value="activate_cookie_message_0" %s> <label for="activate_cookie_message_0">' .__( 'Unable notification temporary', 'cookie-textdomain' ) . '</label>',
