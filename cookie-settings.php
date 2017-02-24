@@ -420,8 +420,8 @@ function cookie_inline_scripts() {
     $cookie_settings_options = get_option( 'cookie_settings_option_name' ); // Array of All Options
     // Output array
     $banner_options = array (
-        'background'    =>	$cookie_settings_options['background_color_1'] ? $cookie_settings_options['background_color_1'] : '#808080',
-        'text_color'    =>	$cookie_settings_options['text_color_2'] ? $cookie_settings_options['text_color_2'] : '#ffffff',
+        'background'    =>	$cookie_settings_options['background_color_1'] ? sanitize_hex_color($cookie_settings_options['background_color_1']) : '#808080',
+        'text_color'    =>	$cookie_settings_options['text_color_2'] ? sanitize_hex_color($cookie_settings_options['text_color_2']) : '#ffffff',
         'button_text'   =>	$cookie_settings_options['button_text_3'] ? $cookie_settings_options['button_text_3'] : '' .__( 'ok', 'cookie-textdomain' ) . '',
         'position'       =>	$cookie_settings_options['banner_position_4'] ? $cookie_settings_options['banner_position_4'] : '',
         'message'       =>	$cookie_settings_options['banner_message_5'] ? $cookie_settings_options['banner_message_5'] : '' .__( 'Les cookies assurent le bon fonctionnement de nos services. En utilisant ces derniers, vous acceptez l&apos;utilisation des cookies.', 'cookie-textdomain' ) . '',
@@ -442,7 +442,7 @@ function cookie_inline_scripts() {
                 // Notification options
             var option = <?php print json_encode($banner_options, 128); // 128 to convert to a pretty Json string ?>;
 
-            // We execute and pass the banner options string
+            // We execute and pass the banner options
             if (window.attachEvent)
                 window.attachEvent('onload', createCookieBanner( option));
             else
