@@ -552,12 +552,12 @@ function cookie_inline_scripts() {
                     }
 
                     // Position conditional style
-                    var banner_position;
+                    var banner_position = "top:auto;bottom:0;"; // Default position
+
                     if(option.position === 'top') {
                         banner_position = "bottom:auto;top:0;";
-                    } else {
-                        banner_position = "top:auto;bottom:0;";
                     }
+
                     var bannerWrapper = createDom("<div id='cookieBannerContainer' style='background: "+option.background+"; background-color: "+convertHex(option.background,option.opacity)+"; color: "+option.text_color+"; font-size: "+option.font_size+"px;"+banner_position+"'><div class='cookie-inner container'>"+option.message+" "+link_button+"  <button type='button' style='color:"+option.text_color+";border:1px solid "+option.text_color+";font-size: "+option.font_size+"px;' id='cookieBannerButton' title='Fermer'>"+option.button_text+"</button></div></div>");
 
                     body=document.body;
