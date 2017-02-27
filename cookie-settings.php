@@ -110,6 +110,14 @@ if( !class_exists( 'CookieSettings' )){
                 'cookie-settings-admin' // page
             );
 
+            // Add Section for extra options
+            add_settings_section(
+                'cookie_settings_extra_options', // id
+                '', // title
+                array( $this, 'cookie_settings_section_extra_options' ), // callback
+                'cookie-settings-admin' // page
+            );
+
             // Add Message Field
             add_settings_field(
                 'activate_cookie_message_0', // id
@@ -204,7 +212,14 @@ if( !class_exists( 'CookieSettings' )){
                 'cookie-settings-admin', // page
                 'cookie_settings_setting_link' // section
             );
-
+            // Add banner custom CSS Field
+            add_settings_field(
+                'banner_custom_css_11', // id
+                __('Custom css', 'cookie-textdomain'), // title
+                array( $this, 'banner_custom_css_11_callback' ), // callback
+                'cookie-settings-admin', // page
+                'cookie_settings_extra_options' // section
+            );
         }
         /**
          * Functions that registers settings link on plugin description.
@@ -230,6 +245,12 @@ if( !class_exists( 'CookieSettings' )){
          */
         public function cookie_settings_section_link_options() {
             echo "<hr><h2>".__(  'More Info link options', 'cookie-textdomain' )."</h2>";
+        }
+        /**
+         * Section extra options callback
+         */
+        public function cookie_settings_section_extra_options() {
+            echo "<hr><h2>".__(  'Extra settings', 'cookie-textdomain' )."</h2>";
         }
         /**
          * Functions that display the fields.
@@ -278,6 +299,10 @@ if( !class_exists( 'CookieSettings' )){
 
             if ( isset( $input['banner_more_info_url_target_blank_10'] ) ) {
                 $sanitary_values['banner_more_info_url_target_blank_10'] = $input['banner_more_info_url_target_blank_10'];
+            }
+
+            if ( isset( $input['banner_custom_css_11'] ) ) {
+                $sanitary_values['banner_custom_css_11'] = esc_textarea( $input['banner_custom_css_11'] );
             }
 
             return $sanitary_values;
@@ -363,6 +388,13 @@ if( !class_exists( 'CookieSettings' )){
             );
         }
 
+        public function banner_custom_css_11_callback() {
+            printf(
+                ''.__( '#cookie-notification-wrapper {<br><br>', 'cookie-textdomain' ).'   <textarea placeholder="' .__( '', 'cookie-textdomain' ) . '" class="large-text" rows="5" name="cookie_settings_option_name[banner_custom_css_11]" id="banner_custom_css_11">%s</textarea>'.__( '<br><br>}', 'cookie-textdomain' ).' <p class="description"><small>'.__( 'Use carefully, bad css can brake the current banner styles. The styles will be applied to the main wrapper #cookie-notification-wrapper', 'cookie-textdomain' ).'</small></p>',
+                isset( $this->cookie_settings_options['banner_custom_css_11'] ) ? esc_attr( $this->cookie_settings_options['banner_custom_css_11']) : ''
+            );
+        }
+
     }
 } // !class_exists
 
@@ -381,6 +413,7 @@ if ( is_admin() )
 //   $banner_more_info_text_8 = $cookie_settings_options['banner_more_info_text_8']; // Banner link text
 //   $banner_more_info_url_9 = $cookie_settings_options['banner_more_info_url_9']; // Banner link url
 //   $banner_more_info_url_target_blank_10 = $cookie_settings_options['banner_more_info_url_target_blank_10']; // Activate cookie message
+//   $banner_custom_css_11 = $cookie_settings_options['banner_custom_css_11']; // Banner message
 
 
 /******************************************************************************
@@ -401,6 +434,7 @@ if ( !get_option( 'cookie_settings_option_name' )['activate_cookie_message_0'] &
  * Inline CSS to build banner general style
  */
 function cookie_inline_css () {
+
     echo '<style id="cookie_inline_css" type="text/css">
           #cookie-notification-wrapper {
               width:100%;
@@ -432,6 +466,15 @@ function cookie_inline_css () {
           }
       </style>
     ';
+    // Extra custom css
+    $cookie_settings_options = get_option( 'cookie_settings_option_name' ); // Array of All Options
+    if($cookie_settings_options['banner_custom_css_11']) {
+        echo '<style id="cookie_inline_custom_css" type="text/css">
+                #cookie-notification-wrapper {
+                    '.$cookie_settings_options['banner_custom_css_11'].'
+                }
+            </style>';
+    }
 }
 
 /**
@@ -452,13 +495,13 @@ function cookie_inline_scripts() {
         'link_text'     =>	$cookie_settings_options['banner_more_info_text_8'] ? $cookie_settings_options['banner_more_info_text_8'] : ''.__( 'en savoir plus', 'cookie-textdomain' ).'',
         'link_url'      =>	$cookie_settings_options['banner_more_info_url_9'] ? esc_url_raw($cookie_settings_options['banner_more_info_url_9']) : '',
         'link_target_blank'   =>	$cookie_settings_options['banner_more_info_url_target_blank_10'] ? $cookie_settings_options['banner_more_info_url_target_blank_10'] : false,
+        'custom_css'    =>	$cookie_settings_options['banner_custom_css_11'] ? $cookie_settings_options['banner_custom_css_11'] : '',
     );
 
     // Check whether jquery has been loaded (even if we do not have a jquery dependency).
     if( wp_script_is( 'jquery', 'done' ) ) { ?>
         <!--START cookie_inline_scripts-->
         <script id="cookie_inline_scripts" type="text/javascript" >
-
             /**************************************************
              * Start - Cookie Message
              ***************************************************/
