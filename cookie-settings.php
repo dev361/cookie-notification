@@ -402,7 +402,7 @@ if ( !get_option( 'cookie_settings_option_name' )['activate_cookie_message_0'] &
  */
 function cookie_inline_css () {
     echo '<style id="cookie_inline_css" type="text/css">
-          #cookieBannerContainer {
+          #cookie-notification-wrapper {
               width:100%;
               min-height:36px; 
               font-family:Arial,Helvetica,sans serif;
@@ -412,10 +412,10 @@ function cookie_inline_css () {
               position:fixed;  
               left: 0;
           }
-          #cookieBannerContainer .cookie-inner {
+          #cookie-notification-wrapper .cookie-notification-inner {
             display:inline-block;
           }
-          #cookieBannerContainer button[type="button"] {
+          #cookie-notification-wrapper button[type="button"] {
               background:none; 
               height: 26px;
               line-height:25px; 
@@ -559,14 +559,15 @@ function cookie_inline_scripts() {
                         banner_position = "bottom:auto;top:0;";
                     }
 
-                    var bannerWrapper = createDom("<div id='cookieBannerContainer' style='background: "+option.background+"; background-color: "+convertHex(option.background,option.opacity)+"; color: "+option.text_color+"; font-size: "+option.font_size+"px;"+banner_position+"'><div class='cookie-inner container'>"+option.message+" "+link_button+"  <button type='button' style='color:"+option.text_color+";border:1px solid "+option.text_color+";font-size: "+option.font_size+"px;' id='cookieBannerButton' title='Fermer'>"+option.button_text+"</button></div></div>");
+                    // create banner
+                    var bannerWrapper = createDom("<div id='cookie-notification-wrapper' style='background: "+option.background+"; background-color: "+convertHex(option.background,option.opacity)+"; color: "+option.text_color+"; font-size: "+option.font_size+"px;"+banner_position+"'><div class='cookie-notification-inner container'>"+option.message+" "+link_button+"  <button type='button' style='color:"+option.text_color+";border:1px solid "+option.text_color+";font-size: "+option.font_size+"px;' id='cookie-notification-button' title='Fermer'>"+option.button_text+"</button></div></div>");
 
                     body=document.body;
                     body.insertBefore(bannerWrapper,body.childNodes[0]);
 
-                    setTimeout(function () {document.getElementById("cookieBannerContainer");}, 300);
-                    document.getElementById('cookieBannerButton').onclick = function(){
-                        var p = document.getElementById("cookieBannerContainer");
+                    setTimeout(function () {document.getElementById("cookie-notification-wrapper");}, 300);
+                    document.getElementById('cookie-notification-button').onclick = function(){
+                        var p = document.getElementById("cookie-notification-wrapper");
                         body.removeChild(p);
                         writeCookie("cookie-enabled", "1", getDomain(), "/");
                     }
