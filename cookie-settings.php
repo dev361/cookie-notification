@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Groupe 361 Cookie message settings
+ * Plugin Name:       Cookie notification message
  * Plugin URI:        www.groupe361.com
  * Description:       Simple and customizable cookie notification message
  * Version:           1.0.0
@@ -56,8 +56,8 @@ if( !class_exists( 'CookieSettings' )){
         public function cookie_settings_add_plugin_page() {
             // $page_title, $menu_title, $capability, $menu_slug, $callback_function
             add_options_page(
-                __('Cookie message', 'cookie-textdomain'), // page_title
-                __('Cookie message', 'cookie-textdomain'), // menu_title
+                __('Cookie notification message', 'cookie-textdomain'), // page_title
+                __('Cookie notification message', 'cookie-textdomain'), // menu_title
                 'manage_options', // capability
                 'cookie-settings', // menu_slug
                 array( $this, 'cookie_settings_create_admin_page' ) // function
@@ -71,7 +71,7 @@ if( !class_exists( 'CookieSettings' )){
             $this->cookie_settings_options = get_option( 'cookie_settings_option_name' ); ?>
 
             <div class="wrap">
-                <h2><?php _e( 'Cookie message settings', 'cookie-textdomain' ); ?></h2>
+                <h2><?php _e( 'Cookie notification message settings', 'cookie-textdomain' ); ?></h2>
                 <p><?php _e( 'Use the fields to overwrite the default banner styles and settings.', 'cookie-textdomain' ); ?></p>
                 <?php settings_errors(); ?>
 
@@ -445,7 +445,7 @@ function cookie_inline_scripts() {
         'background'    =>	$cookie_settings_options['background_color_1'] ? sanitize_hex_color($cookie_settings_options['background_color_1']) : '#808080',
         'text_color'    =>	$cookie_settings_options['text_color_2'] ? sanitize_hex_color($cookie_settings_options['text_color_2']) : '#ffffff',
         'button_text'   =>	$cookie_settings_options['button_text_3'] ? $cookie_settings_options['button_text_3'] : '' .__( 'ok', 'cookie-textdomain' ) . '',
-        'position'       =>	$cookie_settings_options['banner_position_4'] ? $cookie_settings_options['banner_position_4'] : '',
+        'position'      =>	$cookie_settings_options['banner_position_4'] ? $cookie_settings_options['banner_position_4'] : '',
         'message'       =>	$cookie_settings_options['banner_message_5'] ? $cookie_settings_options['banner_message_5'] : '' .__( 'Les cookies assurent le bon fonctionnement de nos services. En utilisant ces derniers, vous acceptez l&apos;utilisation des cookies.', 'cookie-textdomain' ) . '',
         'font_size'     =>	$cookie_settings_options['banner_font_size_6'] ? $cookie_settings_options['banner_font_size_6'] : '11',
         'opacity'       =>	$cookie_settings_options['banner_opacity_7'] ? $cookie_settings_options['banner_opacity_7'] : '80',
