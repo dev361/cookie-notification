@@ -17,17 +17,17 @@ if ( ! defined( 'ABSPATH' ) ) {
     die;
 }
 
-if( !class_exists( 'CookieSettings' )){
-    class CookieSettings {
-        private $cookie_settings_options;
+if( !class_exists( 'CookieNotification' )){
+    class CookieNotification {
+        private $cookie_notification_options;
         /**
          * Plugin initialization
          */
         public function __construct() {
             // Add the page to the admin menu
-            add_action( 'admin_menu', array( $this, 'cookie_settings_add_plugin_page' ) );
+            add_action( 'admin_menu', array( $this, 'cookie_notification_add_plugin_page' ) );
             // Register page options
-            add_action( 'admin_init', array( $this, 'cookie_settings_page_init' ) );
+            add_action( 'admin_init', array( $this, 'cookie_notification_page_init' ) );
             // Enqueue the needed Javascript and CSS in admin panel (Color picker)
             add_action('admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
             // Add plugin settings link
@@ -42,7 +42,7 @@ if( !class_exists( 'CookieSettings' )){
             $screen = get_current_screen();
 
             // We load the JS only in our settings page
-            if ( $screen -> id == 'settings_page_cookie-settings' ) {
+            if ( $screen -> id == 'settings_page_cookie-notification' ) {
                 // Css color-picker
                 wp_enqueue_style( 'wp-color-picker' );
                 // Load external js file with color-picker dependency
@@ -53,22 +53,22 @@ if( !class_exists( 'CookieSettings' )){
         /**
          * Function that will add the options page under Setting Menu.
          */
-        public function cookie_settings_add_plugin_page() {
+        public function cookie_notification_add_plugin_page() {
             // $page_title, $menu_title, $capability, $menu_slug, $callback_function
             add_options_page(
                 __('Cookie notification message', 'cookie-textdomain'), // page_title
                 __('Cookie notification message', 'cookie-textdomain'), // menu_title
                 'manage_options', // capability
-                'cookie-settings', // menu_slug
-                array( $this, 'cookie_settings_create_admin_page' ) // function
+                'cookie-notification', // menu_slug
+                array( $this, 'cookie_notification_create_admin_page' ) // function
             );
         }
 
         /**
          * Function that will display the options page.
          */
-        public function cookie_settings_create_admin_page() {
-            $this->cookie_settings_options = get_option( 'cookie_settings_option_name' ); ?>
+        public function cookie_notification_create_admin_page() {
+            $this->cookie_notification_options = get_option( 'cookie_notification_option_name' ); ?>
 
             <div class="wrap">
                 <h2><?php _e( 'Cookie notification message settings', 'cookie-textdomain' ); ?></h2>
@@ -77,45 +77,45 @@ if( !class_exists( 'CookieSettings' )){
 
                 <form method="post" action="options.php">
                     <?php
-                    settings_fields( 'cookie_settings_option_group' );
-                    do_settings_sections( 'cookie-settings-admin' );
+                    settings_fields( 'cookie_notification_option_group' );
+                    do_settings_sections( 'cookie-notification-admin' );
                     submit_button();
                     ?>
                 </form>
             </div>
         <?php }
 
-        public function cookie_settings_page_init() {
+        public function cookie_notification_page_init() {
 
             // Register Settings
             register_setting(
-                'cookie_settings_option_group', // option_group
-                'cookie_settings_option_name', // option_name
-                array( $this, 'cookie_settings_sanitize' ) // sanitize_callback
+                'cookie_notification_option_group', // option_group
+                'cookie_notification_option_name', // option_name
+                array( $this, 'cookie_notification_sanitize' ) // sanitize_callback
             );
 
             // Add Section for option fields
             add_settings_section(
-                'cookie_settings_setting_section', // id
+                'cookie_notification_setting_section', // id
                 '', // title
-                array( $this, 'cookie_settings_section_info' ), // callback
-                'cookie-settings-admin' // page
+                array( $this, 'cookie_notification_section_info' ), // callback
+                'cookie-notification-admin' // page
             );
 
             // Add Section for option fields - Link
             add_settings_section(
-                'cookie_settings_setting_link', // id
+                'cookie_notification_setting_link', // id
                 '', // title
-                array( $this, 'cookie_settings_section_link_options' ), // callback
-                'cookie-settings-admin' // page
+                array( $this, 'cookie_notification_section_link_options' ), // callback
+                'cookie-notification-admin' // page
             );
 
             // Add Section for extra options
             add_settings_section(
-                'cookie_settings_extra_options', // id
+                'cookie_notification_extra_options', // id
                 '', // title
-                array( $this, 'cookie_settings_section_extra_options' ), // callback
-                'cookie-settings-admin' // page
+                array( $this, 'cookie_notification_section_extra_options' ), // callback
+                'cookie-notification-admin' // page
             );
 
             // Add Message Field
@@ -123,8 +123,8 @@ if( !class_exists( 'CookieSettings' )){
                 'activate_cookie_message_0', // id
                 __('General activation', 'cookie-textdomain'), // title
                 array( $this, 'activate_cookie_message_0_callback' ), // callback
-                'cookie-settings-admin', // page
-                'cookie_settings_setting_section' // section
+                'cookie-notification-admin', // page
+                'cookie_notification_setting_section' // section
             );
 
             // Add Background Color Field
@@ -132,8 +132,8 @@ if( !class_exists( 'CookieSettings' )){
                 'background_color_1', // id
                 __('Background color', 'cookie-textdomain'), // title
                 array( $this, 'background_color_1_callback' ), // callback
-                'cookie-settings-admin', // page
-                'cookie_settings_setting_section' // section
+                'cookie-notification-admin', // page
+                'cookie_notification_setting_section' // section
             );
 
             // Add Text Color Field
@@ -141,8 +141,8 @@ if( !class_exists( 'CookieSettings' )){
                 'text_color_2', // id
                 __('Text color', 'cookie-textdomain'), // title
                 array( $this, 'text_color_2_callback' ), // callback
-                'cookie-settings-admin', // page
-                'cookie_settings_setting_section' // section
+                'cookie-notification-admin', // page
+                'cookie_notification_setting_section' // section
             );
 
             // Add Button text Field
@@ -150,8 +150,8 @@ if( !class_exists( 'CookieSettings' )){
                 'button_text_3', // id
                 __('Accept button text', 'cookie-textdomain'), // title
                 array( $this, 'button_text_3_callback' ), // callback
-                'cookie-settings-admin', // page
-                'cookie_settings_setting_section' // section
+                'cookie-notification-admin', // page
+                'cookie_notification_setting_section' // section
             );
 
             // Add banner position Field
@@ -159,8 +159,8 @@ if( !class_exists( 'CookieSettings' )){
                 'banner_position_4', // id
                 __('Position', 'cookie-textdomain'), // title
                 array( $this, 'banner_position_4_callback' ), // callback
-                'cookie-settings-admin', // page
-                'cookie_settings_setting_section' // section
+                'cookie-notification-admin', // page
+                'cookie_notification_setting_section' // section
             );
 
             // Add banner message Field
@@ -168,8 +168,8 @@ if( !class_exists( 'CookieSettings' )){
                 'banner_message_5', // id
                 __('Notification message', 'cookie-textdomain'), // title
                 array( $this, 'banner_message_5_callback' ), // callback
-                'cookie-settings-admin', // page
-                'cookie_settings_setting_section' // section
+                'cookie-notification-admin', // page
+                'cookie_notification_setting_section' // section
             );
 
             // Add banner message font size
@@ -177,48 +177,48 @@ if( !class_exists( 'CookieSettings' )){
                 'banner_font_size_6', // id
                 __('Font size', 'cookie-textdomain'), // title
                 array( $this, 'banner_font_size_6_callback' ), // callback
-                'cookie-settings-admin', // page
-                'cookie_settings_setting_section' // section
+                'cookie-notification-admin', // page
+                'cookie_notification_setting_section' // section
             );
             // Add banner opacity
             add_settings_field(
                 'banner_opacity_7', // id
                 __('Opacity', 'cookie-textdomain'), // title
                 array( $this, 'banner_opacity_7_callback' ), // callback
-                'cookie-settings-admin', // page
-                'cookie_settings_setting_section' // section
+                'cookie-notification-admin', // page
+                'cookie_notification_setting_section' // section
             );
             // Add banner link text
             add_settings_field(
                 'banner_more_info_text_8', // id
                 __('More Info Text', 'cookie-textdomain'), // title
                 array( $this, 'banner_more_info_text_8_callback' ), // callback
-                'cookie-settings-admin', // page
-                'cookie_settings_setting_link' // section
+                'cookie-notification-admin', // page
+                'cookie_notification_setting_link' // section
             );
             // Add banner link url
             add_settings_field(
                 'banner_more_info_url_9', // id
                 __('More Info url', 'cookie-textdomain'), // title
                 array( $this, 'banner_more_info_url_9_callback' ), // callback
-                'cookie-settings-admin', // page
-                'cookie_settings_setting_link' // section
+                'cookie-notification-admin', // page
+                'cookie_notification_setting_link' // section
             );
             // Field to open url in new window
             add_settings_field(
                 'banner_more_info_url_target_blank_10', // id
                 __('', 'cookie-textdomain'), // title
                 array( $this, 'banner_more_info_url_target_blank_10_callback' ), // callback
-                'cookie-settings-admin', // page
-                'cookie_settings_setting_link' // section
+                'cookie-notification-admin', // page
+                'cookie_notification_setting_link' // section
             );
             // Add banner custom CSS Field
             add_settings_field(
                 'banner_custom_css_11', // id
                 __('Custom css', 'cookie-textdomain'), // title
                 array( $this, 'banner_custom_css_11_callback' ), // callback
-                'cookie-settings-admin', // page
-                'cookie_settings_extra_options' // section
+                'cookie-notification-admin', // page
+                'cookie_notification_extra_options' // section
             );
         }
         /**
@@ -228,7 +228,7 @@ if( !class_exists( 'CookieSettings' )){
             $this_plugin = plugin_basename(__FILE__);
 
             if ( is_plugin_active($this_plugin) && $file == $this_plugin ) {
-                $links[] = '<a href="' . admin_url( 'options-general.php?page=cookie-settings' ) . '">' . __( 'Settings', 'cookie-textdomain' ) . '</a>';
+                $links[] = '<a href="' . admin_url( 'options-general.php?page=cookie-notification' ) . '">' . __( 'Settings', 'cookie-textdomain' ) . '</a>';
             }
 
             return $links;
@@ -237,25 +237,25 @@ if( !class_exists( 'CookieSettings' )){
         /**
          * Section info callback
          */
-        public function cookie_settings_section_info() {
+        public function cookie_notification_section_info() {
             echo '<hr>';
         }
         /**
          * Section link callback
          */
-        public function cookie_settings_section_link_options() {
+        public function cookie_notification_section_link_options() {
             echo "<hr><h2>".__(  'More Info link options', 'cookie-textdomain' )."</h2>";
         }
         /**
          * Section extra options callback
          */
-        public function cookie_settings_section_extra_options() {
+        public function cookie_notification_section_extra_options() {
             echo "<hr><h2>".__(  'Extra settings', 'cookie-textdomain' )."</h2>";
         }
         /**
          * Functions that display the fields.
          */
-        public function cookie_settings_sanitize($input) {
+        public function cookie_notification_sanitize($input) {
             $sanitary_values = array();
             if ( isset( $input['activate_cookie_message_0'] ) ) {
                 $sanitary_values['activate_cookie_message_0'] = $input['activate_cookie_message_0'];
@@ -313,85 +313,85 @@ if( !class_exists( 'CookieSettings' )){
          */
         public function activate_cookie_message_0_callback() {
             printf(
-                '<input type="checkbox" name="cookie_settings_option_name[activate_cookie_message_0]" id="activate_cookie_message_0" value="activate_cookie_message_0" %s> <label for="activate_cookie_message_0">' .__( 'Unable notification temporary', 'cookie-textdomain' ) . '</label>',
-                ( isset( $this->cookie_settings_options['activate_cookie_message_0'] ) && $this->cookie_settings_options['activate_cookie_message_0'] === 'activate_cookie_message_0' ) ? 'checked' : ''
+                '<input type="checkbox" name="cookie_notification_option_name[activate_cookie_message_0]" id="activate_cookie_message_0" value="activate_cookie_message_0" %s> <label for="activate_cookie_message_0">' .__( 'Unable notification temporary', 'cookie-textdomain' ) . '</label>',
+                ( isset( $this->cookie_notification_options['activate_cookie_message_0'] ) && $this->cookie_notification_options['activate_cookie_message_0'] === 'activate_cookie_message_0' ) ? 'checked' : ''
             );
         }
 
         public function background_color_1_callback() {
             printf(
-                '<input class="cookie-color-picker regular-text" type="text" name="cookie_settings_option_name[background_color_1]" id="background_color_1" value="%s"><p class="description"><small>' .__( 'Default background color : <code>#808080</code>', 'cookie-textdomain' ) . '</small></p>',
-                isset( $this->cookie_settings_options['background_color_1'] ) ? esc_attr( $this->cookie_settings_options['background_color_1']) : ''
+                '<input class="cookie-color-picker regular-text" type="text" name="cookie_notification_option_name[background_color_1]" id="background_color_1" value="%s"><p class="description"><small>' .__( 'Default background color : <code>#808080</code>', 'cookie-textdomain' ) . '</small></p>',
+                isset( $this->cookie_notification_options['background_color_1'] ) ? esc_attr( $this->cookie_notification_options['background_color_1']) : ''
             );
         }
 
         public function text_color_2_callback() {
             printf(
-                '<input class="cookie-color-picker regular-text" type="text" name="cookie_settings_option_name[text_color_2]" id="text_color_2" value="%s"><p class="description"><small>' .__( 'Default text color : <code>#ffffff</code>', 'cookie-textdomain' ) . '</small></p>',
-                isset( $this->cookie_settings_options['text_color_2'] ) ? esc_attr( $this->cookie_settings_options['text_color_2']) : ''
+                '<input class="cookie-color-picker regular-text" type="text" name="cookie_notification_option_name[text_color_2]" id="text_color_2" value="%s"><p class="description"><small>' .__( 'Default text color : <code>#ffffff</code>', 'cookie-textdomain' ) . '</small></p>',
+                isset( $this->cookie_notification_options['text_color_2'] ) ? esc_attr( $this->cookie_notification_options['text_color_2']) : ''
             );
         }
 
         public function button_text_3_callback() {
             printf(
-                '<input class="regular-text" type="text" name="cookie_settings_option_name[button_text_3]" id="button_text_3" value="%s" placeholder="ok">',
-                isset( $this->cookie_settings_options['button_text_3'] ) ? esc_attr( $this->cookie_settings_options['button_text_3']) : ''
+                '<input class="regular-text" type="text" name="cookie_notification_option_name[button_text_3]" id="button_text_3" value="%s" placeholder="ok">',
+                isset( $this->cookie_notification_options['button_text_3'] ) ? esc_attr( $this->cookie_notification_options['button_text_3']) : ''
             );
         }
 
         public function banner_position_4_callback() {
-            ?> <fieldset><?php $checked = ( isset( $this->cookie_settings_options['banner_position_4'] ) && $this->cookie_settings_options['banner_position_4'] === 'top' ) ? 'checked' : '' ; ?>
-                <label for="banner_position_4-0"><input type="radio" name="cookie_settings_option_name[banner_position_4]" id="banner_position_4-0" value="top" <?php echo $checked; ?>>  <?php _e( 'Top', 'cookie-textdomain' ); ?></label><br>
-                <?php $checked = ( isset( $this->cookie_settings_options['banner_position_4'] ) && $this->cookie_settings_options['banner_position_4'] === 'bottom' ) ? 'checked' : '' ; ?>
-                <label for="banner_position_4-1"><input type="radio" name="cookie_settings_option_name[banner_position_4]" id="banner_position_4-1" value="bottom" <?php echo $checked; ?>> <?php _e( 'Bottom', 'cookie-textdomain' ); ?></label></fieldset> <p class="description"><small><?php _e( 'Default position : <code>bottom</code>', 'cookie-textdomain' ); ?></small></p><?php
+            ?> <fieldset><?php $checked = ( isset( $this->cookie_notification_options['banner_position_4'] ) && $this->cookie_notification_options['banner_position_4'] === 'top' ) ? 'checked' : '' ; ?>
+                <label for="banner_position_4-0"><input type="radio" name="cookie_notification_option_name[banner_position_4]" id="banner_position_4-0" value="top" <?php echo $checked; ?>>  <?php _e( 'Top', 'cookie-textdomain' ); ?></label><br>
+                <?php $checked = ( isset( $this->cookie_notification_options['banner_position_4'] ) && $this->cookie_notification_options['banner_position_4'] === 'bottom' ) ? 'checked' : '' ; ?>
+                <label for="banner_position_4-1"><input type="radio" name="cookie_notification_option_name[banner_position_4]" id="banner_position_4-1" value="bottom" <?php echo $checked; ?>> <?php _e( 'Bottom', 'cookie-textdomain' ); ?></label></fieldset> <p class="description"><small><?php _e( 'Default position : <code>bottom</code>', 'cookie-textdomain' ); ?></small></p><?php
         }
 
         public function banner_message_5_callback() {
             printf(
-                '<textarea placeholder="' .__( 'Les cookies assurent le bon fonctionnement de nos services. En utilisant ces derniers, vous acceptez l&apos;utilisation des cookies.', 'cookie-textdomain' ) . '" class="large-text" rows="5" name="cookie_settings_option_name[banner_message_5]" id="banner_message_5">%s</textarea>',
-                isset( $this->cookie_settings_options['banner_message_5'] ) ? esc_attr( $this->cookie_settings_options['banner_message_5']) : ''
+                '<textarea placeholder="' .__( 'Les cookies assurent le bon fonctionnement de nos services. En utilisant ces derniers, vous acceptez l&apos;utilisation des cookies.', 'cookie-textdomain' ) . '" class="large-text" rows="5" name="cookie_notification_option_name[banner_message_5]" id="banner_message_5">%s</textarea>',
+                isset( $this->cookie_notification_options['banner_message_5'] ) ? esc_attr( $this->cookie_notification_options['banner_message_5']) : ''
             );
         }
 
         public function banner_font_size_6_callback() {
             printf(
-                '<input class="small-text" type="text" name="cookie_settings_option_name[banner_font_size_6]" id="banner_font_size_6" value="%s" placeholder="11"> px',
-                isset( $this->cookie_settings_options['banner_font_size_6'] ) ? esc_attr( $this->cookie_settings_options['banner_font_size_6']) : ''
+                '<input class="small-text" type="text" name="cookie_notification_option_name[banner_font_size_6]" id="banner_font_size_6" value="%s" placeholder="11"> px',
+                isset( $this->cookie_notification_options['banner_font_size_6'] ) ? esc_attr( $this->cookie_notification_options['banner_font_size_6']) : ''
             );
         }
 
         public function banner_opacity_7_callback() {
             printf(
-                '<input class="small-text" type="text" name="cookie_settings_option_name[banner_opacity_7]" id="banner_opacity_7" value="%s" placeholder="80"> %% <p class="description"><small>1-100</small></p>',
-                isset( $this->cookie_settings_options['banner_opacity_7'] ) ? esc_attr( $this->cookie_settings_options['banner_opacity_7']) : ''
+                '<input class="small-text" type="text" name="cookie_notification_option_name[banner_opacity_7]" id="banner_opacity_7" value="%s" placeholder="80"> %% <p class="description"><small>1-100</small></p>',
+                isset( $this->cookie_notification_options['banner_opacity_7'] ) ? esc_attr( $this->cookie_notification_options['banner_opacity_7']) : ''
             );
         }
 
         public function banner_more_info_text_8_callback() {
             printf(
-                '<input class="regular-text" type="text" name="cookie_settings_option_name[banner_more_info_text_8]" id="banner_more_info_text_8" value="%s" placeholder="'.__( 'en savoir plus', 'cookie-textdomain' ).'"> ',
-                isset( $this->cookie_settings_options['banner_more_info_text_8'] ) ? esc_attr( $this->cookie_settings_options['banner_more_info_text_8']) : ''
+                '<input class="regular-text" type="text" name="cookie_notification_option_name[banner_more_info_text_8]" id="banner_more_info_text_8" value="%s" placeholder="'.__( 'en savoir plus', 'cookie-textdomain' ).'"> ',
+                isset( $this->cookie_notification_options['banner_more_info_text_8'] ) ? esc_attr( $this->cookie_notification_options['banner_more_info_text_8']) : ''
             );
         }
 
         public function banner_more_info_url_9_callback() {
             printf(
-                '<input class="regular-text" type="text" name="cookie_settings_option_name[banner_more_info_url_9]" id="banner_more_info_url_9" value="%s">  <p class="description"><small>'.__( 'If no url, the more info link will not be displayed', 'cookie-textdomain' ).'</small></p>',
-                isset( $this->cookie_settings_options['banner_more_info_url_9'] ) ? esc_url_raw( $this->cookie_settings_options['banner_more_info_url_9']) : ''
+                '<input class="regular-text" type="text" name="cookie_notification_option_name[banner_more_info_url_9]" id="banner_more_info_url_9" value="%s">  <p class="description"><small>'.__( 'If no url, the more info link will not be displayed', 'cookie-textdomain' ).'</small></p>',
+                isset( $this->cookie_notification_options['banner_more_info_url_9'] ) ? esc_url_raw( $this->cookie_notification_options['banner_more_info_url_9']) : ''
             );
         }
 
         public function banner_more_info_url_target_blank_10_callback() {
             printf(
-                '<input type="checkbox" name="cookie_settings_option_name[banner_more_info_url_target_blank_10]" id="banner_more_info_url_target_blank_10" value="banner_more_info_url_target_blank_10" %s> <label for="banner_more_info_url_target_blank_10">' .__( 'Open url in new window', 'cookie-textdomain' ) . '</label>',
-                ( isset( $this->cookie_settings_options['banner_more_info_url_target_blank_10'] ) && $this->cookie_settings_options['banner_more_info_url_target_blank_10'] === 'banner_more_info_url_target_blank_10' ) ? 'checked' : ''
+                '<input type="checkbox" name="cookie_notification_option_name[banner_more_info_url_target_blank_10]" id="banner_more_info_url_target_blank_10" value="banner_more_info_url_target_blank_10" %s> <label for="banner_more_info_url_target_blank_10">' .__( 'Open url in new window', 'cookie-textdomain' ) . '</label>',
+                ( isset( $this->cookie_notification_options['banner_more_info_url_target_blank_10'] ) && $this->cookie_notification_options['banner_more_info_url_target_blank_10'] === 'banner_more_info_url_target_blank_10' ) ? 'checked' : ''
             );
         }
 
         public function banner_custom_css_11_callback() {
             printf(
-                ''.__( '#cookie-notification-wrapper {<br><br>', 'cookie-textdomain' ).'   <textarea placeholder="' .__( '', 'cookie-textdomain' ) . '" class="large-text" rows="5" name="cookie_settings_option_name[banner_custom_css_11]" id="banner_custom_css_11">%s</textarea>'.__( '<br><br>}', 'cookie-textdomain' ).' <p class="description"><small>'.__( 'Use carefully, bad css can brake the current banner styles. The styles will be applied to the main wrapper #cookie-notification-wrapper', 'cookie-textdomain' ).'</small></p>',
-                isset( $this->cookie_settings_options['banner_custom_css_11'] ) ? esc_attr( $this->cookie_settings_options['banner_custom_css_11']) : ''
+                ''.__( '#cookie-notification-wrapper {<br><br>', 'cookie-textdomain' ).'   <textarea placeholder="' .__( '', 'cookie-textdomain' ) . '" class="large-text" rows="5" name="cookie_notification_option_name[banner_custom_css_11]" id="banner_custom_css_11">%s</textarea>'.__( '<br><br>}', 'cookie-textdomain' ).' <p class="description"><small>'.__( 'Use carefully, bad css can brake the current banner styles. The styles will be applied to the main wrapper #cookie-notification-wrapper', 'cookie-textdomain' ).'</small></p>',
+                isset( $this->cookie_notification_options['banner_custom_css_11'] ) ? esc_attr( $this->cookie_notification_options['banner_custom_css_11']) : ''
             );
         }
 
@@ -399,21 +399,21 @@ if( !class_exists( 'CookieSettings' )){
 } // !class_exists
 
 if ( is_admin() )
-    $cookie_settings = new CookieSettings();
+    $cookie_notification = new CookieNotification();
 //
-//   $cookie_settings_options = get_option( 'cookie_settings_option_name' ); // Array of All Options
-//   $activate_cookie_message_0 = $cookie_settings_options['activate_cookie_message_0']; // Activate cookie message
-//   $background_color_1 = $cookie_settings_options['background_color_1']; // Background color
-//   $text_color_2 = $cookie_settings_options['text_color_2']; // Text color
-//   $button_text_3 = $cookie_settings_options['button_text_3']; // Button text
-//   $banner_position_4 = $cookie_settings_options['banner_position_4']; // Position
-//   $banner_message_5 = $cookie_settings_options['banner_message_5']; // Banner message
-//   $banner_font_size_6 = $cookie_settings_options['banner_font_size_6']; // Banner font size
-//   $banner_opacity_7 = $cookie_settings_options['banner_opacity_7']; // Banner opacity
-//   $banner_more_info_text_8 = $cookie_settings_options['banner_more_info_text_8']; // Banner link text
-//   $banner_more_info_url_9 = $cookie_settings_options['banner_more_info_url_9']; // Banner link url
-//   $banner_more_info_url_target_blank_10 = $cookie_settings_options['banner_more_info_url_target_blank_10']; // Activate cookie message
-//   $banner_custom_css_11 = $cookie_settings_options['banner_custom_css_11']; // Banner message
+//   $cookie_notification_options = get_option( 'cookie_notification_option_name' ); // Array of All Options
+//   $activate_cookie_message_0 = $cookie_notification_options['activate_cookie_message_0']; // Activate cookie message
+//   $background_color_1 = $cookie_notification_options['background_color_1']; // Background color
+//   $text_color_2 = $cookie_notification_options['text_color_2']; // Text color
+//   $button_text_3 = $cookie_notification_options['button_text_3']; // Button text
+//   $banner_position_4 = $cookie_notification_options['banner_position_4']; // Position
+//   $banner_message_5 = $cookie_notification_options['banner_message_5']; // Banner message
+//   $banner_font_size_6 = $cookie_notification_options['banner_font_size_6']; // Banner font size
+//   $banner_opacity_7 = $cookie_notification_options['banner_opacity_7']; // Banner opacity
+//   $banner_more_info_text_8 = $cookie_notification_options['banner_more_info_text_8']; // Banner link text
+//   $banner_more_info_url_9 = $cookie_notification_options['banner_more_info_url_9']; // Banner link url
+//   $banner_more_info_url_target_blank_10 = $cookie_notification_options['banner_more_info_url_target_blank_10']; // Activate cookie message
+//   $banner_custom_css_11 = $cookie_notification_options['banner_custom_css_11']; // Banner message
 
 
 /******************************************************************************
@@ -422,7 +422,7 @@ if ( is_admin() )
  * && "cookie-enabled" is already injected
  * && we are not in admin area
  *************************************************************************/
-if ( !isset(get_option( 'cookie_settings_option_name' )['activate_cookie_message_0']) && !isset( $_COOKIE[ 'cookie-enabled']) && !is_admin() ) {
+if ( !isset(get_option( 'cookie_notification_option_name' )['activate_cookie_message_0']) && !isset( $_COOKIE[ 'cookie-enabled']) && !is_admin() ) {
     // Inline CSS in head
     add_action( 'wp_print_styles', 'cookie_inline_css' );
     // Inline JS in footer with priority
@@ -465,11 +465,11 @@ function cookie_inline_css () {
       </style>
     ';
     // Extra custom css
-    $cookie_settings_options = get_option( 'cookie_settings_option_name' ); // Array of All Options
-    if($cookie_settings_options['banner_custom_css_11']) {
+    $cookie_notification_options = get_option( 'cookie_notification_option_name' ); // Array of All Options
+    if($cookie_notification_options['banner_custom_css_11']) {
         echo '<style id="cookie_inline_custom_css" type="text/css">
                 #cookie-notification-wrapper {
-                    '.$cookie_settings_options['banner_custom_css_11'].'
+                    '.$cookie_notification_options['banner_custom_css_11'].'
                 }
             </style>';
     }
@@ -480,20 +480,20 @@ function cookie_inline_css () {
  */
 function cookie_inline_scripts() {
     // Variables with PHP fallback
-    $cookie_settings_options = get_option( 'cookie_settings_option_name' ); // Array of All Options
+    $cookie_notification_options = get_option( 'cookie_notification_option_name' ); // Array of All Options
     // Output array
     $banner_options = array (
-        'background'    =>	$cookie_settings_options['background_color_1'] ? sanitize_hex_color($cookie_settings_options['background_color_1']) : '#808080',
-        'text_color'    =>	$cookie_settings_options['text_color_2'] ? sanitize_hex_color($cookie_settings_options['text_color_2']) : '#ffffff',
-        'button_text'   =>	$cookie_settings_options['button_text_3'] ? $cookie_settings_options['button_text_3'] : '' .__( 'ok', 'cookie-textdomain' ) . '',
-        'position'      =>	isset($cookie_settings_options['banner_position_4']) ? $cookie_settings_options['banner_position_4'] : '',
-        'message'       =>	$cookie_settings_options['banner_message_5'] ? $cookie_settings_options['banner_message_5'] : '' .__( 'Les cookies assurent le bon fonctionnement de nos services. En utilisant ces derniers, vous acceptez l&apos;utilisation des cookies.', 'cookie-textdomain' ) . '',
-        'font_size'     =>	$cookie_settings_options['banner_font_size_6'] ? $cookie_settings_options['banner_font_size_6'] : '11',
-        'opacity'       =>	$cookie_settings_options['banner_opacity_7'] ? $cookie_settings_options['banner_opacity_7'] : '80',
-        'link_text'     =>	$cookie_settings_options['banner_more_info_text_8'] ? $cookie_settings_options['banner_more_info_text_8'] : ''.__( 'en savoir plus', 'cookie-textdomain' ).'',
-        'link_url'      =>	$cookie_settings_options['banner_more_info_url_9'] ? esc_url_raw($cookie_settings_options['banner_more_info_url_9']) : '',
-        'link_target_blank'   =>	isset($cookie_settings_options['banner_more_info_url_target_blank_10']) ? $cookie_settings_options['banner_more_info_url_target_blank_10'] : false,
-        'custom_css'    =>	$cookie_settings_options['banner_custom_css_11'] ? $cookie_settings_options['banner_custom_css_11'] : '',
+        'background'    =>	$cookie_notification_options['background_color_1'] ? sanitize_hex_color($cookie_notification_options['background_color_1']) : '#808080',
+        'text_color'    =>	$cookie_notification_options['text_color_2'] ? sanitize_hex_color($cookie_notification_options['text_color_2']) : '#ffffff',
+        'button_text'   =>	$cookie_notification_options['button_text_3'] ? $cookie_notification_options['button_text_3'] : '' .__( 'ok', 'cookie-textdomain' ) . '',
+        'position'      =>	isset($cookie_notification_options['banner_position_4']) ? $cookie_notification_options['banner_position_4'] : '',
+        'message'       =>	$cookie_notification_options['banner_message_5'] ? $cookie_notification_options['banner_message_5'] : '' .__( 'Les cookies assurent le bon fonctionnement de nos services. En utilisant ces derniers, vous acceptez l&apos;utilisation des cookies.', 'cookie-textdomain' ) . '',
+        'font_size'     =>	$cookie_notification_options['banner_font_size_6'] ? $cookie_notification_options['banner_font_size_6'] : '11',
+        'opacity'       =>	$cookie_notification_options['banner_opacity_7'] ? $cookie_notification_options['banner_opacity_7'] : '80',
+        'link_text'     =>	$cookie_notification_options['banner_more_info_text_8'] ? $cookie_notification_options['banner_more_info_text_8'] : ''.__( 'en savoir plus', 'cookie-textdomain' ).'',
+        'link_url'      =>	$cookie_notification_options['banner_more_info_url_9'] ? esc_url_raw($cookie_notification_options['banner_more_info_url_9']) : '',
+        'link_target_blank'   =>	isset($cookie_notification_options['banner_more_info_url_target_blank_10']) ? $cookie_notification_options['banner_more_info_url_target_blank_10'] : false,
+        'custom_css'    =>	$cookie_notification_options['banner_custom_css_11'] ? $cookie_notification_options['banner_custom_css_11'] : '',
     );
 
     { ?>
