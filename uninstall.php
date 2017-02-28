@@ -22,10 +22,10 @@
  * @link       www.german-pichardo.com
  * @since      1.0.0
  *
- * @package    Cookie_Settings
+ * @package    Cookie_Notification
  */
 
 // If uninstall not called from WordPress, then exit.
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-	exit;
+    exit;
 }
