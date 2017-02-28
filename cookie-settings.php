@@ -590,7 +590,7 @@ function cookie_inline_scripts() {
                             link_target_blank = " target='_blank' ";
                         }
                         // Build the href
-                        link_button = "<a "+link_target_blank+" href='" + option.link_url + "' style='text-decoration: underline;' title='" + option.link_text + "' >" + option.link_text + "</a> ";
+                        link_button = "<a "+link_target_blank+" href='" + option.link_url + "' style='color: "+option.text_color+";text-decoration: underline;' title='" + option.link_text + "' >" + option.link_text + "</a> ";
                     }
 
                     // Position conditional style
