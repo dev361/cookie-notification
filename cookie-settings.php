@@ -497,8 +497,7 @@ function cookie_inline_scripts() {
         'custom_css'    =>	$cookie_settings_options['banner_custom_css_11'] ? $cookie_settings_options['banner_custom_css_11'] : '',
     );
 
-    // Check whether jquery has been loaded (even if we do not have a jquery dependency).
-    if( wp_script_is( 'jquery', 'done' ) ) { ?>
+    { ?>
         <!--START cookie_inline_scripts-->
         <script id="cookie_inline_scripts" type="text/javascript" >
             /**************************************************
@@ -620,7 +619,6 @@ function cookie_inline_scripts() {
              ***************************************************/
         </script>
         <!--END cookie_inline_scripts-->
-        <?php
-    }
+    <?php }
 
 }
