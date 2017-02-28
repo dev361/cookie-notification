@@ -422,8 +422,7 @@ if ( is_admin() )
  * && "cookie-enabled" is already injected
  * && we are not in admin area
  *************************************************************************/
-
-if ( !get_option( 'cookie_settings_option_name' )['activate_cookie_message_0'] && !isset( $_COOKIE[ 'cookie-enabled']) && !is_admin() ) {
+if ( !isset(get_option( 'cookie_settings_option_name' )['activate_cookie_message_0']) && !isset( $_COOKIE[ 'cookie-enabled']) && !is_admin() ) {
     // Inline CSS in head
     add_action( 'wp_print_styles', 'cookie_inline_css' );
     // Inline JS in footer with priority
@@ -488,13 +487,13 @@ function cookie_inline_scripts() {
         'background'    =>	$cookie_settings_options['background_color_1'] ? sanitize_hex_color($cookie_settings_options['background_color_1']) : '#808080',
         'text_color'    =>	$cookie_settings_options['text_color_2'] ? sanitize_hex_color($cookie_settings_options['text_color_2']) : '#ffffff',
         'button_text'   =>	$cookie_settings_options['button_text_3'] ? $cookie_settings_options['button_text_3'] : '' .__( 'ok', 'cookie-textdomain' ) . '',
-        'position'      =>	$cookie_settings_options['banner_position_4'] ? $cookie_settings_options['banner_position_4'] : '',
+        'position'      =>	isset($cookie_settings_options['banner_position_4']) ? $cookie_settings_options['banner_position_4'] : '',
         'message'       =>	$cookie_settings_options['banner_message_5'] ? $cookie_settings_options['banner_message_5'] : '' .__( 'Les cookies assurent le bon fonctionnement de nos services. En utilisant ces derniers, vous acceptez l&apos;utilisation des cookies.', 'cookie-textdomain' ) . '',
         'font_size'     =>	$cookie_settings_options['banner_font_size_6'] ? $cookie_settings_options['banner_font_size_6'] : '11',
         'opacity'       =>	$cookie_settings_options['banner_opacity_7'] ? $cookie_settings_options['banner_opacity_7'] : '80',
         'link_text'     =>	$cookie_settings_options['banner_more_info_text_8'] ? $cookie_settings_options['banner_more_info_text_8'] : ''.__( 'en savoir plus', 'cookie-textdomain' ).'',
         'link_url'      =>	$cookie_settings_options['banner_more_info_url_9'] ? esc_url_raw($cookie_settings_options['banner_more_info_url_9']) : '',
-        'link_target_blank'   =>	$cookie_settings_options['banner_more_info_url_target_blank_10'] ? $cookie_settings_options['banner_more_info_url_target_blank_10'] : false,
+        'link_target_blank'   =>	isset($cookie_settings_options['banner_more_info_url_target_blank_10']) ? $cookie_settings_options['banner_more_info_url_target_blank_10'] : false,
         'custom_css'    =>	$cookie_settings_options['banner_custom_css_11'] ? $cookie_settings_options['banner_custom_css_11'] : '',
     );
 
