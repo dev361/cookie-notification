@@ -437,7 +437,6 @@ function cookie_inline_css () {
     echo '<style id="cookie_inline_css" type="text/css">
           #cookie-notification-wrapper {
               width:100%;
-              min-height:36px; 
               font-family:Arial,Helvetica,sans serif;
               text-align: center;
               padding: 5px;
