@@ -419,10 +419,10 @@ if ( is_admin() )
 /******************************************************************************
  * FRONT-END
  * If disable notification option is checked
- * && "cookie-enabled" is already injected
+ * && "cookie-notification-enabled" is already injected
  * && we are not in admin area
  *************************************************************************/
-if ( !isset(get_option( 'cookie_notification_option_name' )['activate_cookie_message_0']) && !isset( $_COOKIE[ 'cookie-enabled']) && !is_admin() ) {
+if ( !isset(get_option( 'cookie_notification_option_name' )['activate_cookie_message_0']) && !isset( $_COOKIE[ 'cookie-notification-enabled']) && !is_admin() ) {
     // Inline CSS in head
     add_action( 'wp_print_styles', 'cookie_inline_css' );
     // Inline JS in footer with priority
@@ -574,7 +574,7 @@ function cookie_inline_scripts() {
             }
 
             function createCookieBanner(option) {
-                if(!readCookie('cookie-enabled')){
+                if(!readCookie('cookie-notification-enabled')){
                     // Banner string options : background, text_color, button_text, message, font_size, opacity
                     console.log(JSON.stringify(option));
 
@@ -609,7 +609,7 @@ function cookie_inline_scripts() {
                     document.getElementById('cookie-notification-button').onclick = function(){
                         var p = document.getElementById("cookie-notification-wrapper");
                         body.removeChild(p);
-                        writeCookie("cookie-enabled", "1", getDomain(), "/");
+                        writeCookie("cookie-notification-enabled", "1", getDomain(), "/");
                     }
                 }
             }
