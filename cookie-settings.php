@@ -207,7 +207,7 @@ if( !class_exists( 'CookieSettings' )){
             // Field to open url in new window
             add_settings_field(
                 'banner_more_info_url_target_blank_10', // id
-                __('General activation', 'cookie-textdomain'), // title
+                __('', 'cookie-textdomain'), // title
                 array( $this, 'banner_more_info_url_target_blank_10_callback' ), // callback
                 'cookie-settings-admin', // page
                 'cookie_settings_setting_link' // section
