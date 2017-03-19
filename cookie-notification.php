@@ -23,6 +23,8 @@ if( !class_exists( 'CookieNotification' )){
          * Plugin initialization
          */
         public function __construct() {
+            add_action('admin_menu',array( $this, 'cookie_notification_theme_menu_item' ) );
+
             // ADMIN : Register customize options
             add_action( 'customize_register' , array( $this, 'cookie_notification_customize_register' ) );
             add_action( 'customize_controls_enqueue_scripts' , array( $this, 'rewrite_cookie_in_customizer_live_preview' ) );
@@ -31,7 +33,9 @@ if( !class_exists( 'CookieNotification' )){
         //  =====================================================
         //  = ADMIN:                                            =
         //  =====================================================
-
+        public static function cookie_notification_theme_menu_item() {
+            add_theme_page(__('Cookie Notification','cookie-textdomain'), __('Cookie Notification','cookie-textdomain'), 'manage_options', 'customize.php?autofocus[control]=cookie_notification_background_color_1', '');
+        }
         // Rewrite cookie in order to see the notification in preview mode
         public static function rewrite_cookie_in_customizer_live_preview() {
             wp_enqueue_script( 'cookie_rewrite_js', plugins_url( 'js/customizer-rewrite-cookie.js', __FILE__ ), array( 'customize-preview' ), '1.0', true );
@@ -39,6 +43,7 @@ if( !class_exists( 'CookieNotification' )){
 
         // Customizer register fields
         public static function cookie_notification_customize_register($wp_customize ) {
+
             $wp_customize->add_section('cookie_notification_section', array(
                 'title' => __('Cookie notification', 'cookie-textdomain'),
                 'priority' => 35,
@@ -47,6 +52,14 @@ if( !class_exists( 'CookieNotification' )){
             //  =====================================================
             //  = Color Picker : cookie_notification_background_color_1      =
             //  =====================================================
+            // Edit icon
+            if ( isset( $wp_customize->selective_refresh ) ) {
+                $wp_customize->selective_refresh->add_partial( 'cookie_notification_background_color_1', array(
+                    'container_inclusive' => false,
+                    'selector' => '#cookie-notification-wrapper',
+                ) );
+            }
+
             $wp_customize->add_setting('cookie_notification_background_color_1', array(
                 'default' => '#e8e8e7',
                 'sanitize_callback' => 'sanitize_hex_color',
