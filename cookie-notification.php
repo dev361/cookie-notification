@@ -34,7 +34,7 @@ if( !class_exists( 'CookieNotification' )){
         //  = ADMIN:                                            =
         //  =====================================================
         public static function cookie_notification_theme_menu_item() {
-            add_theme_page(__('Cookie Notification','cookie-textdomain'), __('Cookie Notification','cookie-textdomain'), 'manage_options', 'customize.php?autofocus[control]=cookie_notification_background_color_1', '');
+            add_theme_page(__('Cookie Notification','cookie-textdomain'), __('Cookie Notification','cookie-textdomain'), 'manage_options', 'customize.php?autofocus[section]=cookie_notification_section', '');
         }
         // Rewrite cookie in order to see the notification in preview mode
         public static function rewrite_cookie_in_customizer_live_preview() {
