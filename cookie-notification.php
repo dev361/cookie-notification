@@ -361,7 +361,7 @@ function cookie_inline_scripts() {
             function getDomain(){
                 var domain;
 
-                if(isIPaddress(window.location.hostname))
+                if(isIPaddress(window.location.hostname) || window.location.hostname === 'localhost')
                     domain = "";
                 else{
                     domain = window.location.hostname.split(".");
