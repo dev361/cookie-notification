@@ -25,7 +25,7 @@ if( !class_exists( 'CookieNotification' )){
         public function __construct() {
             // ADMIN : Register customize options
             add_action( 'customize_register' , array( $this, 'cookie_notification_customize_register' ) );
-            add_action( 'customize_preview_init' , array( $this, 'rewrite_cookie_in_customizer_live_preview' ) );
+            add_action( 'customize_controls_enqueue_scripts' , array( $this, 'rewrite_cookie_in_customizer_live_preview' ) );
         }
 
         //  =====================================================
