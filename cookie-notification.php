@@ -302,7 +302,7 @@ function cookie_inline_css() { ?>
  *************************************************************************/
 // Verify cookie value
 function is_cookie_notification_enabled(){
-    return (!isset($_COOKIE['cookie-notification-enabled'])) || ( (isset($_COOKIE['cookie-notification-enabled'])) && ($_COOKIE['cookie-notification-enabled'] !== 1) );
+    return (!isset($_COOKIE['cookie-notification-enabled'])) || ( (isset($_COOKIE['cookie-notification-enabled'])) && ($_COOKIE['cookie-notification-enabled'] !== '1') );
 }
 
 
