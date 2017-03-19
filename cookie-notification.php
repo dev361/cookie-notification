@@ -307,7 +307,7 @@ function is_cookie_notification_enabled(){
 
 
 function print_inline_scripts() {
-    if ( is_customize_preview() ||  (is_cookie_notification_enabled() && !is_admin()) ) {
+    if ( false === get_theme_mod( 'cookie_notification_activate_cookie_message_0') &&  (is_cookie_notification_enabled() && !is_admin()) ) {
         // Inline CSS in head
         add_action( 'wp_print_styles', 'cookie_inline_css' );
         // Inline JS in footer with priority
