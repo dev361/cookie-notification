@@ -34,7 +34,7 @@ if( !class_exists( 'CookieNotification' )){
 
         // Rewrite cookie in order to see the notification in preview mode
         public static function rewrite_cookie_in_customizer_live_preview() {
-            wp_enqueue_script( 'cookie_rewrite_js', plugins_url( 'js/customizer-rewrite-cookie.js', __FILE__ ), array( 'customize-preview' ), '20131205', true );
+            wp_enqueue_script( 'cookie_rewrite_js', plugins_url( 'js/customizer-rewrite-cookie.js', __FILE__ ), array( 'customize-preview' ), '1.0', true );
         }
 
         // Customizer register fields
