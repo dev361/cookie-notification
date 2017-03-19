@@ -415,7 +415,7 @@ function cookie_inline_scripts() {
             }
 
             function createCookieBanner(option) {
-                if(readCookie('cookie-notification-enabled')!==1){
+                if(readCookie('cookie-notification-enabled')!=='1'){
                     // Banner string options : background, text_color, button_text, message, font_size, opacity
                     console.log(JSON.stringify(option));
 
