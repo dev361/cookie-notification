@@ -7,7 +7,7 @@ function isIPaddress(ip){
 function getDomain(){
     var domain;
 
-    if(isIPaddress(window.location.hostname))
+    if(isIPaddress(window.location.hostname) || window.location.hostname === 'localhost')
         domain = "";
     else{
         domain = window.location.hostname.split(".");
@@ -15,6 +15,7 @@ function getDomain(){
     }
     return domain;
 }
+
 function writeCookie(key, value, domain, path){
     var dateExpire = new Date();
     dateExpire.setMonth(dateExpire.getMonth() + 13);
